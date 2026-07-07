@@ -78,7 +78,8 @@ class AnalysisService:
             year,
         )
 
-        df = self._read_excel(excel_file)
+        df = self._reader_excel(excel_file)
+        self.validator.validate(df)
 
         self.result.dataframe = df
 
@@ -128,43 +129,7 @@ class AnalysisService:
 
     # =======================================================
 
-    def _read_excel(self, excel_file):
-
-        """
-        Reads the standard ChannelIQ template.
-
-        Header Row = 4
-
-        Data Starts = Row 5
-        """
-
-        df = pd.read_excel(
-
-            excel_file,
-
-            header=EXCEL_HEADER_ROW - 1,
-
-            engine="openpyxl"
-
-        )
-
-        # Remove empty rows
-
-        df = df.dropna(how="all")
-
-        # Skip rows before actual data
-
-        df = df.iloc[
-            EXCEL_DATA_START_ROW
-            - EXCEL_HEADER_ROW:
-        ]
-
-        df.reset_index(
-            drop=True,
-            inplace=True,
-        )
-
-        return df
+   
 
     # =======================================================
 
