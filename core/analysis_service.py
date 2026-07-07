@@ -54,6 +54,10 @@ class AnalysisService:
 
         self.result = AnalysisResult()
 
+        self.reader = ExcelReader()
+
+        self.validator = TemplateValidator()
+
     # =======================================================
     # PUBLIC
     # =======================================================
