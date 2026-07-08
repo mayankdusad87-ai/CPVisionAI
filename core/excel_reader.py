@@ -12,6 +12,7 @@ Business calculations are NOT performed here.
 """
 
 from __future__ import annotations
+from core.column_mapping import COLUMN_MAPPING
 
 from pathlib import Path
 from typing import Union
@@ -89,6 +90,10 @@ class ExcelReader:
             for col in df.columns
 
         ]
+        df.rename(
+            columns=COLUMN_MAPPING,
+            inplace=True,
+        )
 
         # Remove duplicate columns
 
