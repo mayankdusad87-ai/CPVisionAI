@@ -4,15 +4,22 @@ ChannelIQ AI
 
 Excel Reader
 
-Responsible ONLY for reading the standard
-ChannelIQ Excel template.
+Responsible ONLY for reading and cleaning the
+standard ChannelIQ Excel template.
 
-Business calculations are NOT performed here.
+Responsibilities
+----------------
+1. Read Excel
+2. Remove empty rows & columns
+3. Standardize column names
+4. Rename Excel headers to internal names
+5. Return clean DataFrame
+
+No business calculations should be performed here.
 =========================================================
 """
 
 from __future__ import annotations
-from core.column_mapping import COLUMN_MAPPING
 
 from pathlib import Path
 from typing import Union
@@ -24,25 +31,21 @@ from config import (
     EXCEL_DATA_START_ROW,
 )
 
+from core.column_mapping import COLUMN_MAPPING
+
 
 class ExcelReader:
     """
-    Reads the ChannelIQ Excel template.
-
-    Template Standard
-
-    Header Row : 4
-    Data Row   : 5 onwards
+    Reads and cleans the standard ChannelIQ Excel template.
     """
 
     def read(
         self,
         file: Union[str, Path]
     ) -> pd.DataFrame:
-
-        # -----------------------------
-        # Read Excel
-        # -----------------------------
+        """
+        Read an Excel file and return a cleaned dataframe.
+        """
 
         df = pd.read_excel(
             file,
@@ -52,81 +55,135 @@ class ExcelReader:
 
         return self.clean(df)
 
-    # ----------------------------------------------------
+    # -----------------------------------------------------
 
     def clean(
         self,
         df: pd.DataFrame
     ) -> pd.DataFrame:
-
         """
-        Standard cleaning applied
-        to every uploaded template.
+        Standard cleaning pipeline.
         """
 
-        # Remove empty rows
+        # -----------------------------------------------
+        # Remove completely empty rows
+        # -----------------------------------------------
 
         df = df.dropna(how="all")
 
-        # Data begins from Row 5
+        # -----------------------------------------------
+        # Remove completely empty columns
+        # -----------------------------------------------
+
+        df = df.dropna(axis=1, how="all")
+
+        # -----------------------------------------------
+        # Actual data starts from Row 5
+        # -----------------------------------------------
 
         df = df.iloc[
             EXCEL_DATA_START_ROW - EXCEL_HEADER_ROW:
         ]
 
-        # Reset index
+        # -----------------------------------------------
+        # Reset Index
+        # -----------------------------------------------
 
         df.reset_index(
             drop=True,
             inplace=True,
         )
 
+        # -----------------------------------------------
         # Clean column names
+        # -----------------------------------------------
 
         df.columns = [
 
-            str(col).strip()
+            str(col)
+            .strip()
+            .replace("\n", " ")
 
             for col in df.columns
 
         ]
-        df.rename(
-            columns=COLUMN_MAPPING,
-            inplace=True,
-        )
 
+        # -----------------------------------------------
         # Remove duplicate columns
+        # -----------------------------------------------
 
         df = df.loc[
             :,
             ~df.columns.duplicated()
         ]
 
-        return df
+        # -----------------------------------------------
+        # Rename Excel headers
+        # to internal column names
+        # -----------------------------------------------
 
-    # ----------------------------------------------------
+        df.rename(
+            columns=COLUMN_MAPPING,
+            inplace=True,
+        )
+
+        return df.copy()
+
+    # -----------------------------------------------------
 
     def get_columns(
         self,
         df: pd.DataFrame
     ) -> list[str]:
+        """
+        Return dataframe columns.
+        """
 
         return list(df.columns)
 
-    # ----------------------------------------------------
+    # -----------------------------------------------------
 
     def row_count(
         self,
         df: pd.DataFrame
     ) -> int:
+        """
+        Return total rows.
+        """
 
         return len(df)
 
-    # ----------------------------------------------------
+    # -----------------------------------------------------
 
     def column_count(
         self,
         df: pd.DataFrame
     ) -> int:
+        """
+        Return total columns.
+        """
 
         return len(df.columns)
+
+    # -----------------------------------------------------
+
+    def summary(
+        self,
+        df: pd.DataFrame
+    ) -> dict:
+        """
+        Returns dataframe summary.
+
+        Useful for logging,
+        debugging and upload history.
+        """
+
+        return {
+
+            "rows": len(df),
+
+            "columns": len(df.columns),
+
+            "column_names": list(df.columns)
+
+        }
