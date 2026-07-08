@@ -18,9 +18,11 @@ COLUMN_MAPPING = {
 
     "Form No": "form_no",
 
-    "Date of Visit": "visit_date",
+    "Date of Visit* (DD-MM-YYYY)": "visit_date",
 
-    "Customer Name": "customer_name",
+    "First Name*": "first_name",
+
+    "Last Name*": "last_name",
 
     "Mobile Number": "mobile",
 
