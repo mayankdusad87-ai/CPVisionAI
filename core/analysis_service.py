@@ -4,19 +4,22 @@ ChannelIQ AI
 
 Analysis Service
 
-Coordinates the complete business analysis workflow.
+Main orchestration layer.
 
 Flow
 
 Excel
     ↓
-Excel Reader
+ExcelReader
     ↓
-Validation
+TemplateValidator
     ↓
-Data Processor
+DataProcessor
+    ↓
+PartnerAnalyzer
     ↓
 AnalysisResult
+
 =========================================================
 """
 
@@ -28,15 +31,17 @@ from uuid import uuid4
 from core.analysis_result import AnalysisResult
 from core.excel_reader import ExcelReader
 from core.data_processor import DataProcessor
+from core.partner_analyzer import PartnerAnalyzer
+
 from utils.validators import TemplateValidator
 
 
 class AnalysisService:
-    """
-    Main orchestration layer.
 
-    This class does not contain business calculations.
-    It coordinates the complete analysis pipeline.
+    """
+    Main orchestration class.
+
+    Every uploaded Excel passes through this class.
     """
 
     def __init__(self):
@@ -47,113 +52,33 @@ class AnalysisService:
 
         self.processor = DataProcessor()
 
-    # ======================================================
+        self.partner_analyzer = PartnerAnalyzer()
+
+    # =====================================================
+    # PUBLIC
+    # =====================================================
 
     def analyse(
-        self,
-        excel_file,
-        company_name: str,
-        project_name: str,
-        month: str,
-        year: int,
-    ) -> AnalysisResult:
 
-        # ---------------------------------------------
-        # Create a fresh AnalysisResult
-        # ---------------------------------------------
+        self,
+
+        excel_file,
+
+        company_name: str,
+
+        project_name: str,
+
+        month: str,
+
+        year: int,
+
+    ) -> AnalysisResult:
 
         result = AnalysisResult()
 
-        self._initialise_metadata(
-
-            result,
-
-            company_name,
-
-            project_name,
-
-            month,
-
-            year,
-
-        )
-
-        # ---------------------------------------------
-        # Read Excel
-        # ---------------------------------------------
-
-        df = self.reader.read(excel_file)
-
-        # ---------------------------------------------
-        # Validate template
-        # ---------------------------------------------
-
-        self.validator.validate(df)
-
-        result.dataframe = df
-
-        # ---------------------------------------------
-        # Process business metrics
-        # ---------------------------------------------
-
-        metrics = self.processor.process(df)
-
-        # ---------------------------------------------
-        # Populate AnalysisResult
-        # ---------------------------------------------
-
-        result.total_bookings = metrics["booking_count"]
-
-        result.conversion = metrics["booking_percentage"]
-
-        result.metadata = {
-
-            "rows": metrics["total_records"],
-
-            "columns": len(df.columns),
-
-            "fresh_walkins": metrics["fresh_walkins"],
-
-            "unique_revisits": metrics["unique_revisits"],
-
-            "active_channel_partners":
-                metrics["active_channel_partners"],
-
-            "generated_at":
-                datetime.now().isoformat(),
-
-        }
-
-        # Temporary placeholders
-        # These will be replaced by later engines
-
-        result.health_score = 0
-
-        result.revenue_opportunity = 0
-
-        result.growth_rate = 0
-
-        result.high_risk_partners = 0
-
-        return result
-
-    # ======================================================
-
-    def _initialise_metadata(
-
-        self,
-
-        result: AnalysisResult,
-
-        company: str,
-
-        project: str,
-
-        month: str,
-
-        year: int,
-
-    ):
+        # -----------------------------------------
+        # Metadata
+        # -----------------------------------------
 
         result.analysis_id = (
 
@@ -165,10 +90,106 @@ class AnalysisService:
 
         )
 
-        result.company_name = company
+        result.company_name = company_name
 
-        result.project_name = project
+        result.project_name = project_name
 
         result.month = month
 
         result.year = year
+
+        # -----------------------------------------
+        # Read Excel
+        # -----------------------------------------
+
+        df = self.reader.read(excel_file)
+
+        # -----------------------------------------
+        # Validate
+        # -----------------------------------------
+
+        self.validator.run(df)
+
+        result.dataframe = df
+
+        # -----------------------------------------
+        # Process Business Metrics
+        # -----------------------------------------
+
+        processed = self.processor.process(df)
+
+        dashboard = processed["dashboard"]
+
+        customer = processed["customer"]
+
+        bookings = processed["bookings"]
+
+        # -----------------------------------------
+        # Partner Analytics
+        # -----------------------------------------
+
+        partner_df = self.processor.partner_summary(df)
+
+        partner_analysis = self.partner_analyzer.report(
+
+            partner_df
+
+        )
+
+        # -----------------------------------------
+        # Populate AnalysisResult
+        # -----------------------------------------
+
+        result.total_bookings = dashboard["booking_count"]
+
+        result.conversion = dashboard["booking_percentage"]
+
+        result.metadata = {
+
+            "fresh_walkins":
+
+                dashboard["fresh_walkins"],
+
+            "unique_revisits":
+
+                dashboard["unique_revisits"],
+
+            "active_channel_partners":
+
+                dashboard["active_channel_partners"],
+
+            "customer_journey":
+
+                customer,
+
+            "booking_summary":
+
+                bookings,
+
+            "partner_summary":
+
+                partner_analysis,
+
+            "generated_at":
+
+                datetime.now(),
+
+        }
+
+        # -----------------------------------------
+        # Executive Summary
+        # -----------------------------------------
+
+        result.executive_summary = (
+
+            partner_analysis["executive_summary"]
+
+        )
+
+        result.recommendations = (
+
+            partner_analysis["recommendations"]
+
+        )
+
+        return result
