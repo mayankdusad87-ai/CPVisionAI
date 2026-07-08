@@ -103,7 +103,7 @@ class AnalysisService:
         # -----------------------------------------
 
         df = self.reader.read(excel_file)
-        # st.write(df.columns.tolist())
+        
 
         # -----------------------------------------
         # Validate
