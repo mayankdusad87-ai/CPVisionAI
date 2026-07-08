@@ -165,12 +165,38 @@ if selected_page == "🏠 Dashboard":
 
     with left:
 
-        st.subheader("Upload Center")
+       uploaded_file = st.file_uploader(
+    "Upload Monthly Walk-in Tracker",
+    type=["xlsx", "xls"],
+)
 
-        st.file_uploader(
-            "Upload Monthly Walk-in Tracker",
-            type=["xlsx", "xls"],
-        )
+company = st.text_input(
+    "Company Name"
+)
+
+project = st.text_input(
+    "Project Name"
+)
+
+month = st.selectbox(
+    "Month",
+    [
+        "January","February","March","April",
+        "May","June","July","August",
+        "September","October","November","December"
+    ]
+)
+
+year = st.number_input(
+    "Year",
+    value=2026,
+    step=1,
+)
+
+analyse = st.button(
+    "🚀 Analyse",
+    use_container_width=True,
+)
 
     with right:
 
