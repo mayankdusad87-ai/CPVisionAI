@@ -52,7 +52,7 @@ class ExcelReader:
             header=None,
             engine="openpyxl",
         )
-        print(df.head(10))
+        print(df.iloc[:10, :5])
         return self.clean(df)
 
     # -----------------------------------------------------
