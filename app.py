@@ -56,9 +56,7 @@ if Path(STYLE_FILE).exists():
 # DATABASE
 # --------------------------------------------------------
 
-db = DatabaseConnection()
-
-create_tables(db.connection)
+create_tables()
 
 # --------------------------------------------------------
 # SESSION STATE
