@@ -275,3 +275,13 @@ SAVE_AI_REPORT = True
 # =========================================================
 
 DEBUG = True
+
+# =========================================================
+# EXCEL TEMPLATE SETTINGS
+# =========================================================
+
+# Header is on Excel Row 4
+EXCEL_HEADER_ROW = 4
+
+# Actual data starts on Excel Row 5
+EXCEL_DATA_START_ROW = 5
