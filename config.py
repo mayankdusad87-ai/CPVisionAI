@@ -52,7 +52,9 @@ LOGO_PATH = ASSETS_DIR / "logo.png"
 
 # Create folders automatically
 
-for folder in [
+# Create folders automatically
+
+DIRECTORIES = [
 
     ASSETS_DIR,
 
@@ -64,10 +66,32 @@ for folder in [
 
     REPORTS_DIR,
 
-    LOGS_DIR
+    LOGS_DIR,
 
-]:
-    folder.mkdir(parents=True, exist_ok=True)
+]
+
+for folder in DIRECTORIES:
+
+    if folder.exists():
+
+        if folder.is_file():
+
+            raise RuntimeError(
+
+                f"{folder} already exists as a FILE. "
+
+                f"Delete or rename it because ChannelIQ "
+
+                f"expects a DIRECTORY."
+
+            )
+
+    else:
+
+        folder.mkdir(
+            parents=True,
+            exist_ok=True,
+        )
 
 # =========================================================
 # FILES
