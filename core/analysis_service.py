@@ -32,6 +32,7 @@ from core.analysis_result import AnalysisResult
 from core.excel_reader import ExcelReader
 from core.data_processor import DataProcessor
 from core.partner_analyzer import PartnerAnalyzer
+from core.reporting_period import ReportingPeriod
 
 from utils.validators import TemplateValidator
 
