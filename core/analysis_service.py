@@ -126,7 +126,7 @@ class AnalysisService:
 
            reporting_period = latest_period
 
-# Filter dataframe for selected period
+        # Filter dataframe for selected period
 
        df = self.reporting.filter(
 
