@@ -188,84 +188,154 @@ if selected_page == "🏠 Dashboard":
 
                 st.exception(e)
 
-    # =====================================================
-    # ANALYSIS SETTINGS
-    # =====================================================
+  # =====================================================
+# ANALYSIS SETTINGS
+# =====================================================
 
-    if st.session_state.full_dataframe is not None:
+analyse = False
 
-        st.divider()
+if st.session_state.full_dataframe is not None:
 
-        st.subheader("⚙ Analysis Settings")
+    st.divider()
 
-        left, right = st.columns(2)
+    st.subheader("⚙ Analysis Settings")
 
-        with left:
+    left, right = st.columns(2)
 
-            company = st.text_input(
+    # -------------------------------------------------
+    # COMPANY / PROJECT
+    # -------------------------------------------------
 
-                "Company",
+    with left:
 
-                value=st.session_state.company,
+        company = st.text_input(
+            "Company",
+            value=st.session_state.company,
+            placeholder="Builder Name",
+        )
 
-                placeholder="Builder Name",
+        project = st.text_input(
+            "Project",
+            value=st.session_state.project,
+            placeholder="Project Name",
+        )
 
-            )
+    # -------------------------------------------------
+    # REPORTING PERIOD
+    # -------------------------------------------------
 
-            project = st.text_input(
+    with right:
 
-                "Project",
+        if st.session_state.available_periods:
 
-                value=st.session_state.project,
+            default_index = 0
 
-                placeholder="Project Name",
+            if (
+                st.session_state.selected_period
+                in st.session_state.available_periods
+            ):
 
-            )
-
-        with right:
+                default_index = (
+                    st.session_state.available_periods.index(
+                        st.session_state.selected_period
+                    )
+                )
 
             selected_period = st.selectbox(
-
                 "Analysis Period",
-
                 options=st.session_state.available_periods,
-
-                index=st.session_state.available_periods.index(
-                    st.session_state.selected_period
-                ),
-
+                index=default_index,
             )
 
-            st.caption(
-                "Latest reporting period is selected automatically."
+        else:
+
+            selected_period = None
+
+            st.warning(
+                "No reporting periods found in the uploaded tracker."
             )
 
-        st.session_state.company = company
-
-        st.session_state.project = project
-
-        st.session_state.selected_period = selected_period
-
-        st.info(
-
-            f"""
-**Loaded Records**
-
-- Total Records : **{len(st.session_state.full_dataframe):,}**
-
-- Available Reporting Periods : **{len(st.session_state.available_periods)}**
-
-- Current Analysis Period : **{selected_period}**
-"""
+        st.caption(
+            "Latest available reporting period is selected automatically."
         )
 
-        analyse = st.button(
+    # -------------------------------------------------
+    # SAVE SESSION
+    # -------------------------------------------------
 
-            "🚀 Analyse",
+    st.session_state.company = company
+    st.session_state.project = project
+    st.session_state.selected_period = selected_period
 
-            use_container_width=True,
+    # -------------------------------------------------
+    # DATASET SUMMARY
+    # -------------------------------------------------
 
-            type="primary",
+    info1, info2, info3 = st.columns(3)
 
+    with info1:
+
+        st.metric(
+            "Total Records",
+            f"{len(st.session_state.full_dataframe):,}",
         )
+
+    with info2:
+
+        st.metric(
+            "Reporting Periods",
+            len(st.session_state.available_periods),
+        )
+
+    with info3:
+
+        st.metric(
+            "Selected Period",
+            selected_period if selected_period else "-",
+        )
+
+    st.divider()
+
+    analyse = st.button(
+        "🚀 Analyse",
+        use_container_width=True,
+        type="primary",
+    )
+    # =====================================================
+    # RUN ANALYSIS
+    # =====================================================
+
+    if analyse:
+
+        try:
+
+            with st.spinner("Generating Executive Dashboard..."):
+
+                service = AnalysisService()
+
+                result = service.analyse(
+
+                    excel_file=uploaded_file,
+
+                    company_name=company,
+
+                    project_name=project,
+
+                    reporting_period=selected_period,
+
+                )
+
+                st.session_state.analysis_result = result
+
+                st.session_state.company = company
+
+                st.session_state.project = project
+
+                st.session_state.analysis_id = result.analysis_id
+
+            st.success("Analysis completed successfully.")
+
+        except Exception as e:
+
+            st.exception(e)
 
