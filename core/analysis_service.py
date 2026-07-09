@@ -14,6 +14,8 @@ ExcelReader
     ↓
 TemplateValidator
     ↓
+ReportingPeriod
+    ↓
 DataProcessor
     ↓
 PartnerAnalyzer
@@ -38,7 +40,6 @@ from utils.validators import TemplateValidator
 
 
 class AnalysisService:
-
     """
     Main orchestration class.
 
@@ -62,88 +63,65 @@ class AnalysisService:
     # =====================================================
 
     def analyse(
-
         self,
-
         excel_file,
-
         company_name: str,
-
         project_name: str,
-
         reporting_period: str | None = None,
-
     ) -> AnalysisResult:
 
         result = AnalysisResult()
 
-        # -----------------------------------------
+        # -------------------------------------------------
         # Metadata
-        # -----------------------------------------
+        # -------------------------------------------------
 
         result.analysis_id = (
-
             datetime.now().strftime("%Y%m%d")
-
             + "-"
-
             + uuid4().hex[:8].upper()
-
         )
 
         result.company_name = company_name
-
         result.project_name = project_name
 
         result.month = reporting_period or ""
-
         result.year = 0
 
-        # -----------------------------------------
+        # -------------------------------------------------
         # Read Excel
-        # -----------------------------------------
+        # -------------------------------------------------
 
         full_df = self.reader.read(excel_file)
 
-        # -----------------------------------------
+        # -------------------------------------------------
         # Validate
-        # -----------------------------------------
-        
+        # -------------------------------------------------
+
         self.validator.run(full_df)
 
-                # -----------------------------------------
+        # -------------------------------------------------
         # Reporting Period
-        # -----------------------------------------
+        # -------------------------------------------------
 
         available_periods = self.reporting.available_periods(full_df)
 
         latest_period = self.reporting.latest_period(full_df)
 
-        # If UI has not supplied a reporting period,
-        # use the latest available period.
-
         if reporting_period is None:
 
             reporting_period = latest_period
 
-        # Filter dataframe for selected period
-
         df = self.reporting.filter(
-
             full_df,
-
             reporting_period,
-
         )
 
-        result.dataframe = df 
-     result.metadata["available_periods"] = available_periods
+        result.dataframe = df
 
-     result.metadata["reporting_period"] = reporting_period
-
-        # -----------------------------------------
+        # -------------------------------------------------
         # Process Business Metrics
-        # -----------------------------------------
+        # -------------------------------------------------
 
         processed = self.processor.process(df)
 
@@ -153,21 +131,19 @@ class AnalysisService:
 
         bookings = processed["bookings"]
 
-        # -----------------------------------------
+        # -------------------------------------------------
         # Partner Analytics
-        # -----------------------------------------
+        # -------------------------------------------------
 
         partner_df = self.processor.partner_summary(df)
 
         partner_analysis = self.partner_analyzer.report(
-
             partner_df
-
         )
 
-        # -----------------------------------------
-        # Populate AnalysisResult
-        # -----------------------------------------
+        # -------------------------------------------------
+        # Populate Analysis Result
+        # -------------------------------------------------
 
         result.total_bookings = dashboard["booking_count"]
 
@@ -175,54 +151,43 @@ class AnalysisService:
 
         result.metadata = {
 
-            "reporting_period":
+            "available_periods": available_periods,
 
-                 reporting_period,
+            "reporting_period": reporting_period,
 
             "fresh_walkins":
-
                 dashboard["fresh_walkins"],
 
             "unique_revisits":
-
                 dashboard["unique_revisits"],
 
             "active_channel_partners":
-
                 dashboard["active_channel_partners"],
 
             "customer_journey":
-
                 customer,
 
             "booking_summary":
-
                 bookings,
 
             "partner_summary":
-
                 partner_analysis,
 
             "generated_at":
-
                 datetime.now(),
 
         }
 
-        # -----------------------------------------
+        # -------------------------------------------------
         # Executive Summary
-        # -----------------------------------------
+        # -------------------------------------------------
 
         result.executive_summary = (
-
             partner_analysis["executive_summary"]
-
         )
 
         result.recommendations = (
-
             partner_analysis["recommendations"]
-
         )
 
         return result
