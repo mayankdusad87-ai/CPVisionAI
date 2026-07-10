@@ -36,6 +36,8 @@ COLUMN_MAPPING = {
 
     "Booking Date (DD-MM-YYYY)": "booking_date",
 
+    "Booking Done (Y/N)": "booking_done"
+
     "Project Name": "project_name",
 
     "Source*": "source",
@@ -96,6 +98,8 @@ CHANNEL_PARTNER = "channel_partner"
 CLOSING_MANAGER = "closing_manager"
 
 BOOKING_DATE = "booking_date"
+
+BOOKING_DONE = "booking_done"
 
 PROJECT_NAME = "project_name"
 
