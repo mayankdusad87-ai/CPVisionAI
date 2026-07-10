@@ -145,15 +145,20 @@ class AnalysisService:
         # Populate Analysis Result
         # -------------------------------------------------
 
-        result.total_bookings = dashboard["booking_count"]
+        result.total_bookings = dashboard["bookings"]
 
-        result.conversion = dashboard["booking_percentage"]
+        result.conversion = dashboard["conversion"]
 
         result.metadata = {
 
-            "available_periods": available_periods,
+            "available_periods": 
+                available_periods,
 
-            "reporting_period": reporting_period,
+            "reporting_period": 
+                reporting_period,
+
+            "total_walkins":
+                dashboard["total_walkins"],
 
             "fresh_walkins":
                 dashboard["fresh_walkins"],
