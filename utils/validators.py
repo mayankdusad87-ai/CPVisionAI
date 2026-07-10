@@ -20,7 +20,7 @@ from core.column_mapping import (
     VISIT_DATE,
     CUSTOMER_NAME,
     MOBILE,
-    customer_fresh_revisit,
+    CUSTOMER_FRESH_REVISIT,
     CHANNEL_PARTNER,
     CLOSING_MANAGER,
 )
@@ -48,7 +48,7 @@ class TemplateValidator:
 
             MOBILE,
 
-            customer_fresh_revisit,
+            CUSTOMER_FRESH_REVISIT,
 
             CHANNEL_PARTNER,
 
