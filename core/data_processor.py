@@ -10,11 +10,14 @@ Version : 1.0
 =========================================================
 """
 
+
 from __future__ import annotations
 
 from datetime import datetime, timedelta
 
 import pandas as pd
+
+from core.kpi_engine import KPIEngine
 
 from core.column_mapping import (
     VISIT_DATE,
@@ -27,6 +30,10 @@ from core.column_mapping import (
 
 
 class DataProcessor:
+    
+  def __init__(self):
+
+    self.kpi = KPIEngine()
 
     """
     Extracts business metrics from the cleaned dataframe.
@@ -66,35 +73,15 @@ class DataProcessor:
         df: pd.DataFrame,
     ) -> dict:
 
+        dashboard = self.kpi.dashboard(df)
+
+        dashboard["booking_count"] = dashboard["bookings"]
+
+        dashboard["booking_percentage"] = dashboard["conversion"]
+
         fresh_walkins = self.total_fresh_walkins(df)
 
-        unique_revisits = self.unique_revisits(df)
-
-        booking_count = self.booking_count(df)
-
-        booking_percentage = self.booking_percentage(
-            booking_count,
-            fresh_walkins,
-        )
-
-        active_channel_partners = self.active_channel_partners(
-            df
-        )
-
-        return {
-
-            "fresh_walkins": fresh_walkins,
-
-            "unique_revisits": unique_revisits,
-
-            "booking_count": booking_count,
-
-            "booking_percentage": booking_percentage,
-
-            "active_channel_partners":
-                active_channel_partners,
-
-        }
+        return dashboard
 
     # =====================================================
     # CUSTOMER JOURNEY
