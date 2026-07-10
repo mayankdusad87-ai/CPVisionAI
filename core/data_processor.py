@@ -30,11 +30,6 @@ from core.column_mapping import (
 
 
 class DataProcessor:
-    
-  def __init__(self):
-
-        self.kpi = KPIEngine()
-
     """
     Extracts business metrics from the cleaned dataframe.
 
@@ -43,7 +38,15 @@ class DataProcessor:
     It only calculates facts.
     """
 
- def process(
+    def __init__(self):
+
+        self.kpi = KPIEngine()
+
+    # =====================================================
+    # PROCESS
+    # =====================================================
+
+    def process(
         self,
         df: pd.DataFrame,
     ) -> dict:
