@@ -36,7 +36,7 @@ COLUMN_MAPPING = {
 
     "Booking Date (DD-MM-YYYY)": "booking_date",
 
-    "Booking Done (Y/N)": "booking_done"
+    "Booking Done (Y/N)": "booking_done",
 
     "Project Name": "project_name",
 
