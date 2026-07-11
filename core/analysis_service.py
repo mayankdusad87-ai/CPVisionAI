@@ -181,6 +181,10 @@ class AnalysisService:
             "generated_at":
                 datetime.now(),
 
+            "participating_cp":
+
+               dashboard["participating_cp"],
+
         }
 
         # -------------------------------------------------
