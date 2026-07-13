@@ -223,35 +223,27 @@ class KPIEngine:
 
         
     def participating_cp(
-        self,
-        df: pd.DataFrame,
-    ) -> int:
-       """
-       Participating Channel Partners
+    self,
+    df: pd.DataFrame,
+) -> int:
+    """
+    Participating Channel Partners
 
-       Reporting KPI
+    Reporting KPI
 
-       Definition
+    Definition:
+    Distinct Channel Partners
+    during selected reporting period.
+    """
 
-       Distinct Channel Partners
-       having at least one walk-in/revisit
-       during selected reporting period.
-       """
+    cp = self._channel_partner_df(df)
 
-      cp = self._channel_partner_df(df)
-
-      return (
-
-        cp[CHANNEL_PARTNER]
-
+    return (
+        cp["channel_partner"]
         .dropna()
-
         .astype(str)
-
         .str.strip()
-
         .nunique()
-
     )
 
 
