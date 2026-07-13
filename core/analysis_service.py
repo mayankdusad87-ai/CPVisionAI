@@ -25,6 +25,7 @@ AnalysisResult
 =========================================================
 """
 
+from core.partner_engine import PartnerEngine
 from __future__ import annotations
 
 from datetime import datetime
@@ -118,6 +119,17 @@ class AnalysisService:
         )
 
         result.dataframe = df
+
+        partner_engine = PartnerEngine()
+
+        partner_df = partner_engine.analyse(df)
+
+        print("=" * 80)
+        print("PARTNER ENGINE OUTPUT")
+        print(partner_df.head(10))
+        print("=" * 80)
+
+        print(partner_df.head(10))
 
         # -------------------------------------------------
         # Process Business Metrics
