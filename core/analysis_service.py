@@ -64,7 +64,7 @@ class AnalysisService:
 
     def analyse(
         self,
-        excel_file,
+        dataframe,
         company_name: str,
         project_name: str,
         reporting_period: str | None = None,
@@ -92,7 +92,7 @@ class AnalysisService:
         # Read Excel
         # -------------------------------------------------
 
-        full_df = self.reader.read(excel_file)
+        full_df = dataframe.copy()
 
         # -------------------------------------------------
         # Validate
@@ -127,11 +127,8 @@ class AnalysisService:
 
         dashboard = processed["dashboard"]
 
-        print("=" * 50)
-        print("DASHBOARD KEYS")
-        print(dashboard.keys())
-        print(dashboard)
-        print("=" * 50)
+        if not isinstance(dashboard, dict):
+           raise ValueError("KPI Engine did not return a dashboard dictionary.")
 
         customer = processed["customer"]
 
@@ -155,41 +152,31 @@ class AnalysisService:
 
         result.conversion = dashboard["conversion"]
 
-        result.metadata = {
+       result.metadata = {
+ 
+          "available_periods": available_periods,
 
-           "available_periods":
-              available_periods,
+         "reporting_period": reporting_period,
 
-           "reporting_period":
-              reporting_period,
+         "total_walkins": dashboard.get("total_walkins", 0),
 
-          "total_walkins":
-             dashboard["total_walkins"],
+        "fresh_walkins": dashboard.get("fresh_walkins", 0),
 
-          "fresh_walkins":
-             dashboard["fresh_walkins"],
+        "unique_revisits": dashboard.get("unique_revisits", 0),
 
-          "unique_revisits":
-             dashboard["unique_revisits"],
+        "participating_cp": dashboard.get("participating_cp", 0),
 
-         "participating_cp":
-            dashboard["participating_cp"],
+        "customer_journey": customer,
 
-         "customer_journey":
-           customer,
+        "booking_summary": bookings,
+  
+       "partner_summary": partner_analysis,
 
-         "booking_summary":
-            bookings,
+       "generated_at": datetime.now(),
 
-         "partner_summary":
-           partner_analysis,
+       }
 
-         "generated_at":
-           datetime.now(),
-
-      }
-
-       # -------------------------------------------------
+        # -------------------------------------------------
         # Executive Summary
         # -------------------------------------------------
 
