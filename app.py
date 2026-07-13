@@ -420,7 +420,7 @@ if st.session_state.analysis_result is not None:
         partner_table,
         use_container_width=True,
         hide_index=True,
-    )
+      )
 
 # =====================================================
 # KPI VALIDATION (TEMPORARY)
