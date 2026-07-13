@@ -42,6 +42,9 @@ class AnalysisService:
         self.reporting = ReportingPeriod()
 
         self.ai_provider = OpenAIProvider()
+        print("=" * 80)
+        print("OPENAI HEALTH:", self.ai_provider.health_check())
+        print("=" * 80)
 
         self.consulting = ConsultingEngine(
             self.ai_provider
