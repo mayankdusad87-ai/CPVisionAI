@@ -128,12 +128,7 @@ class AnalysisService:
 
         result.dataframe = df
 
-        partner_engine = PartnerEngine()
-        partner_df = partner_engine.analyse(df)
-        partner_analysis = self.partner_analyzer.report(
-        partner_df
-        )
-        
+       
 
         # -------------------------------------------------
         # Process Business Metrics
@@ -160,7 +155,7 @@ class AnalysisService:
         partner_df = partner_engine.analyse(df)
 
         partner_analysis = self.partner_analyzer.report(
-            partner_df
+        partner_df
         )
 
         # -------------------------------------------------
