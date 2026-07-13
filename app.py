@@ -438,8 +438,8 @@ with st.expander("🔍 KPI Validation (Temporary)"):
         "Conversion %":
             result.conversion,
 
-        "Active Channel Partners":
-            result.metadata["active_channel_partners"],
+       "Participating CP":
+            result.metadata["participating_cp"],
 
     })
 
@@ -454,7 +454,7 @@ with st.expander("🔍 KPI Validation (Temporary)"):
         f"""
 During **{result.metadata['reporting_period']}**, the business generated **{result.metadata['total_walkins']} Channle Partner walk-ins**, resulting in **{result.total_bookings} bookings** with a **{result.conversion:.2f}% conversion rate**.
 
-A total of **{result.metadata['active_channel_partners']} active channel partners** contributed during this reporting period.
+A total of **{result.metadata['participating_cp']} Participating CP** contributed during this reporting period.
 """
     )
 
