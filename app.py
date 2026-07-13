@@ -335,11 +335,11 @@ if st.session_state.full_dataframe is not None:
 
                 st.success("Analysis completed successfully.")
             
-                st.rerun()
+            st.rerun()
 
-                except Exception as e:
+        except Exception as e:
 
-               st.exception(e)
+            st.exception(e)
 
 
 
