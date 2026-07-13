@@ -37,6 +37,8 @@ from core.partner_analyzer import PartnerAnalyzer
 
 from core.partner_engine import PartnerEngine
 from core.reporting_period import ReportingPeriod
+from core.ai.consulting_engine import ConsultingEngine
+from core.ai.openai_provider import OpenAIProvider
 
 from utils.validators import TemplateValidator
 
