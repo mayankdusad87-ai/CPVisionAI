@@ -216,26 +216,26 @@ class AnalysisService:
         # Executive Summary
         # -------------------------------------------------
 
-        if result.ai_report:
-        
-                    result.executive_summary = result.ai_report.get(
-                        "executive_summary",
-                        "",
-                    )
-                
-                    result.recommendations = result.ai_report.get(
-                        "recommendations",
-                        [],
-                    )
-        
-        else:
-        
-                    result.executive_summary = (
-                        partner_analysis["executive_summary"]
-                    )
-                
-                    result.recommendations = (
-                        partner_analysis["recommendations"]
-                    )
-        
-        return result
+       if result.ai_report:
+
+        result.executive_summary = result.ai_report.get(
+            "executive_summary",
+            "",
+        )
+    
+        result.recommendations = result.ai_report.get(
+            "recommendations",
+            [],
+        )
+
+    else:
+    
+        result.executive_summary = (
+            partner_analysis["executive_summary"]
+        )
+    
+        result.recommendations = (
+            partner_analysis["recommendations"]
+        )
+    
+    return result
