@@ -315,7 +315,7 @@ if st.session_state.full_dataframe is not None:
 
                 result = service.analyse(
 
-                    excel_file=uploaded_file,
+                    dataframe=st.session_state.full_dataframe,
 
                     company_name=company,
 
