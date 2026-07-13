@@ -124,7 +124,7 @@ class AnalysisService:
         # ----------------------------------------------
         # KPI ENGINE
         # ----------------------------------------------
-
+        print("STEP 1")
         processed = self.processor.process(df)
 
         dashboard = processed["dashboard"]
@@ -132,6 +132,7 @@ class AnalysisService:
         customer = processed["customer"]
 
         bookings = processed["bookings"]
+        print("STEP 2")
 
         if not isinstance(dashboard, dict):
 
@@ -144,8 +145,10 @@ class AnalysisService:
         # ----------------------------------------------
         # PARTNER ENGINE
         # ----------------------------------------------
-
+        print("STEP 3")
         partner_df = self.partner_engine.analyse(df)
+        print("STEP 4")
+        print(partner_df.head())
 
         partner_analysis = (
 
@@ -156,7 +159,7 @@ class AnalysisService:
             )
 
         )
-                # ----------------------------------------------
+        # ----------------------------------------------
         # Populate Result
         # ----------------------------------------------
 
