@@ -333,13 +333,13 @@ if st.session_state.full_dataframe is not None:
 
                 st.session_state.analysis_id = result.analysis_id
 
-            st.success("Analysis completed successfully.")
+                st.success("Analysis completed successfully.")
             
-            st.rerun()
+                st.rerun()
 
-        except Exception as e:
+                except Exception as e:
 
-            st.exception(e)
+               st.exception(e)
 
 
 
@@ -400,7 +400,7 @@ if st.session_state.analysis_result is not None:
 
         st.metric(
             "Participating CP",
-            result.metadata["Participating CP"],
+            result.metadata["participating CP"],
         )
 
     with c6:
