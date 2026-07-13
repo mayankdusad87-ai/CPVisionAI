@@ -149,45 +149,39 @@ class AnalysisService:
 
         result.conversion = dashboard["conversion"]
 
-        result.metadata = {
+       result.metadata = {
 
-            "available_periods": 
-                available_periods,
+    "available_periods":
+        available_periods,
 
-            "reporting_period": 
-                reporting_period,
+    "reporting_period":
+        reporting_period,
 
-            "total_walkins":
-                dashboard["total_walkins"],
+    "total_walkins":
+        dashboard["total_walkins"],
 
-            "fresh_walkins":
-                dashboard["fresh_walkins"],
+    "fresh_walkins":
+        dashboard["fresh_walkins"],
 
-            "unique_revisits":
-                dashboard["unique_revisits"],
+    "unique_revisits":
+        dashboard["unique_revisits"],
 
-            "active_channel_partners":
-                dashboard["active_channel_partners"],
+    "participating_cp":
+        dashboard["participating_cp"],
 
-            "customer_journey":
-                customer,
+    "customer_journey":
+        customer,
 
-            "booking_summary":
-                bookings,
+    "booking_summary":
+        bookings,
 
-            "partner_summary":
-                partner_analysis,
+    "partner_summary":
+        partner_analysis,
 
-            "generated_at":
-                datetime.now(),
+    "generated_at":
+        datetime.now(),
 
-            "participating_cp":
-
-               dashboard["participating_cp"],
-
-        }
-
-        # -------------------------------------------------
+}        # -------------------------------------------------
         # Executive Summary
         # -------------------------------------------------
 
