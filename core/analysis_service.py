@@ -20,7 +20,7 @@ from core.partner_engine import PartnerEngine
 from core.reporting_period import ReportingPeriod
 
 from core.ai.consulting_engine import ConsultingEngine
-from core.ai.openai_provider import OpenAIProvider
+from core.ai.groq_provider import GroqProvider
 
 from utils.validators import TemplateValidator
 
@@ -41,7 +41,7 @@ class AnalysisService:
 
         self.reporting = ReportingPeriod()
 
-        self.ai_provider = OpenAIProvider()
+        self.ai_provider = GroqProvider()
         print("=" * 80)
         print("OPENAI HEALTH:", self.ai_provider.health_check())
         print("=" * 80)
