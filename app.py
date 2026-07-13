@@ -400,7 +400,7 @@ if st.session_state.analysis_result is not None:
 
         st.metric(
             "Participating CP",
-            result.metadata["participating CP"],
+            result.metadata["participating cp"],
         )
 
     with c6:
@@ -416,32 +416,32 @@ if st.session_state.analysis_result is not None:
 # KPI VALIDATION (TEMPORARY)
 # =====================================================
 
-with st.expander("🔍 KPI Validation (Temporary)"):
-
-    st.json({
-
-        "Reporting Period":
-            result.metadata["reporting_period"],
-
-        "Total Walk-ins":
-            result.metadata["total_walkins"],
-
-        "Fresh Walk-ins":
-            result.metadata["fresh_walkins"],
-
-        "Unique Revisits":
-            result.metadata["unique_revisits"],
-
-        "Bookings":
-            result.total_bookings,
-
-        "Conversion %":
-            result.conversion,
-
-       "Participating CP":
-            result.metadata["participating_cp"],
-
-    })
+    with st.expander("🔍 KPI Validation (Temporary)"):
+    
+        st.json({
+    
+            "Reporting Period":
+                result.metadata["reporting_period"],
+    
+            "Total Walk-ins":
+                result.metadata["total_walkins"],
+    
+            "Fresh Walk-ins":
+                result.metadata["fresh_walkins"],
+    
+            "Unique Revisits":
+                result.metadata["unique_revisits"],
+    
+            "Bookings":
+                result.total_bookings,
+    
+            "Conversion %":
+                result.conversion,
+    
+           "Participating CP":
+                result.metadata["participating_cp"],
+    
+        })
 
     # -------------------------------------------------
     # BUSINESS BRIEF
