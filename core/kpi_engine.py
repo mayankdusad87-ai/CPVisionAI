@@ -4,12 +4,9 @@ ChannelIQ AI
 
 KPI Engine
 
+Version : 3.0
+
 Single source of truth for all KPI calculations.
-
-All KPIs are calculated ONLY for
-
-Source = Channel Partner
-
 =========================================================
 """
 
@@ -17,14 +14,31 @@ from __future__ import annotations
 
 import pandas as pd
 
+from core.column_mapping import (
+    SOURCE,
+    CHANNEL_PARTNER,
+    CUSTOMER_FRESH_REVISIT,
+    BOOKING_DONE,
+    BUSINESS_VALUES,
+)
+
 
 class KPIEngine:
 
-    def __init__(self):
+    """
+    Calculates all Reporting KPIs.
 
+    Business Rule:
+    Every KPI is calculated ONLY for
+    Source = Channel Partner
+    """
+
+    def __init__(self):
         pass
 
-    # --------------------------------------------------
+    # =====================================================
+    # INTERNAL HELPERS
+    # =====================================================
 
     def _channel_partner_df(
         self,
@@ -34,8 +48,13 @@ class KPIEngine:
         Returns only Channel Partner records.
         """
 
-        return df[
-            df["source"]
+        if SOURCE not in df.columns:
+            raise ValueError(
+                f"Missing required column: {SOURCE}"
+            )
+
+        cp = df[
+            df[SOURCE]
             .fillna("")
             .astype(str)
             .str.strip()
@@ -43,98 +62,90 @@ class KPIEngine:
             == "CHANNEL PARTNER"
         ].copy()
 
-    # --------------------------------------------------
+        return cp
+
+    # =====================================================
+    # KPI
+    # =====================================================
 
     def total_walkins(
         self,
         df: pd.DataFrame,
     ) -> int:
-        """
-        Total Walk-ins
-
-        Source = Channel Partner
-        """
 
         cp = self._channel_partner_df(df)
 
         return len(cp)
 
-    # --------------------------------------------------
+    # -----------------------------------------------------
 
     def fresh_walkins(
         self,
         df: pd.DataFrame,
     ) -> int:
-        """
-        Fresh Walk-ins
-
-        Source = Channel Partner
-
-        AND
-
-        Customer Fresh/Revisit = Fresh
-        """
 
         cp = self._channel_partner_df(df)
+
+        if CUSTOMER_FRESH_REVISIT not in cp.columns:
+            raise ValueError(
+                f"Missing required column: {CUSTOMER_FRESH_REVISIT}"
+            )
 
         return len(
 
             cp[
-                cp["customer_fresh_revisit"]
+                cp[CUSTOMER_FRESH_REVISIT]
                 .fillna("")
                 .astype(str)
                 .str.strip()
                 .str.upper()
-                == "FRESH"
+                ==
+                BUSINESS_VALUES["fresh"].upper()
             ]
 
         )
 
-    # --------------------------------------------------
+    # -----------------------------------------------------
 
     def unique_revisits(
         self,
         df: pd.DataFrame,
     ) -> int:
-        """
-        Unique Revisits
-        """
 
         cp = self._channel_partner_df(df)
 
         return len(
 
             cp[
-                cp["customer_fresh_revisit"]
+                cp[CUSTOMER_FRESH_REVISIT]
                 .fillna("")
                 .astype(str)
                 .str.strip()
                 .str.upper()
-                == "UNIQUE REVISIT"
+                ==
+                BUSINESS_VALUES["unique_revisit"].upper()
             ]
 
         )
 
-    # --------------------------------------------------
+    # -----------------------------------------------------
 
     def bookings(
         self,
         df: pd.DataFrame,
     ) -> int:
-        """
-        Bookings
-
-        Booking Done = Y
-
-        Source = Channel Partner
-        """
 
         cp = self._channel_partner_df(df)
+
+        if BOOKING_DONE not in cp.columns:
+            raise ValueError(
+                f"Missing required column: {BOOKING_DONE}"
+            )
 
         return len(
 
             cp[
-                cp["booking_done"]
+                cp[BOOKING_DONE]
                 .fillna("")
                 .astype(str)
                 .str.strip()
@@ -144,7 +155,7 @@ class KPIEngine:
 
         )
 
-    # --------------------------------------------------
+    # -----------------------------------------------------
 
     def conversion(
         self,
@@ -153,100 +164,78 @@ class KPIEngine:
 
         fresh = self.fresh_walkins(df)
 
+        if fresh == 0:
+            return 0.0
+
         bookings = self.bookings(df)
 
-        if fresh == 0:
-
-            return 0
-
         return round(
-
             bookings / fresh * 100,
-
             2,
-
         )
 
-    # --------------------------------------------------
+    # -----------------------------------------------------
 
-    def active_channel_partners(
+    def participating_cp(
         self,
         df: pd.DataFrame,
     ) -> int:
-        """
-        Unique Active Channel Partners
-        """
 
         cp = self._channel_partner_df(df)
 
+        if CHANNEL_PARTNER not in cp.columns:
+            raise ValueError(
+                f"Missing required column: {CHANNEL_PARTNER}"
+            )
+
         return (
-
-            cp["channel_partner"]
-
+            cp[CHANNEL_PARTNER]
             .dropna()
-
             .astype(str)
-
             .str.strip()
-
             .nunique()
-
         )
 
-    # --------------------------------------------------
+    # =====================================================
+    # DASHBOARD
+    # =====================================================
 
     def dashboard(
         self,
         df: pd.DataFrame,
     ) -> dict:
         """
-        Returns all dashboard KPIs.
+        Returns all Reporting KPIs.
+
+        NOTE:
+        Active Channel Partners is NOT included.
+        It belongs to NetworkEngine because it is
+        a live KPI and not a reporting-period KPI.
         """
+
+        total_walkins = self.total_walkins(df)
+        fresh_walkins = self.fresh_walkins(df)
+        unique_revisits = self.unique_revisits(df)
+        bookings = self.bookings(df)
+        conversion = self.conversion(df)
+        participating_cp = self.participating_cp(df)
 
         return {
 
-            "total_walkins": self.total_walkins(df),
+            "total_walkins": total_walkins,
 
-            "fresh_walkins": self.fresh_walkins(df),
+            "fresh_walkins": fresh_walkins,
 
-            "unique_revisits": self.unique_revisits(df),
+            "unique_revisits": unique_revisits,
 
-            "bookings": self.bookings(df),
+            "bookings": bookings,
 
-            "conversion": self.conversion(df),
+            "booking_count": bookings,
 
-            "active_channel_partners": self.active_channel_partners(df),
+            "booking_percentage": conversion,
 
-            "participating_cp":self.participating_cp(df),
+            "conversion": conversion,
+
+            "participating_cp": participating_cp,
 
         }
-
-        
-    def participating_cp(
-    self,
-    df: pd.DataFrame,
-) -> int:
-    """
-    Participating Channel Partners
-
-    Reporting KPI
-
-    Definition:
-    Distinct Channel Partners
-    during selected reporting period.
-    """
-
-    cp = self._channel_partner_df(df)
-
-    return (
-        cp["channel_partner"]
-        .dropna()
-        .astype(str)
-        .str.strip()
-        .nunique()
-    )
-
-
-
-
-
