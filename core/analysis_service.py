@@ -152,7 +152,7 @@ class AnalysisService:
         # Partner Analytics
         # -------------------------------------------------
 
-        partner_df = self.processor.partner_summary(df)
+        partner_df = PartnerEngine().analyse(df)
 
         partner_analysis = self.partner_analyzer.report(
             partner_df
@@ -185,6 +185,8 @@ class AnalysisService:
             "booking_summary": bookings,
 
             "partner_summary": partner_analysis,
+ 
+            "partner_table": partner_df,
 
             "generated_at": datetime.now(),
 
