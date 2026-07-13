@@ -133,12 +133,7 @@ class AnalysisService:
         partner_analysis = self.partner_analyzer.report(
             partner_df
         )
-        print("=" * 80)
-        print("PARTNER ENGINE OUTPUT")
-        print(partner_df.head(10))
-        print("=" * 80)
-
-        print(partner_df.head(10))
+        
 
         # -------------------------------------------------
         # Process Business Metrics
@@ -162,6 +157,7 @@ class AnalysisService:
         # -------------------------------------------------
 
         partner_df = PartnerEngine().analyse(df)
+        partner_df = partner_engine.analyse(df)
 
         partner_analysis = self.partner_analyzer.report(
             partner_df
