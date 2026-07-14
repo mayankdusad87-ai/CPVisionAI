@@ -2,6 +2,9 @@ import streamlit as st
 
 
 def show_partner_page(result):
+    st.title("PARTNER PAGE LOADED")
+
+    st.write(result)
 
     st.header("🏆 Partner Intelligence")
 
