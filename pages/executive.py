@@ -32,6 +32,18 @@ def show_executive(result):
 
     show_key_findings(ai)
 
+    st.divider()
+    
+    show_root_causes(ai)
+    
+    st.divider()
+    
+    show_risks(ai)
+    
+    st.divider()
+    
+    show_opportunities(ai)
+
     # Remaining sections will be added in Part 2
 
 
@@ -248,3 +260,121 @@ def show_key_findings(ai):
                     f"Evidence : {evidence}"
 
                 )
+# =====================================================
+# ROOT CAUSES
+# =====================================================
+
+def show_root_causes(ai):
+
+    st.subheader("🧩 Root Causes")
+
+    causes = ai.get("root_causes", [])
+
+    if not causes:
+
+        st.info("No root causes identified.")
+
+        return
+
+    for cause in causes:
+
+        with st.container(border=True):
+
+            st.markdown(
+                f"### {cause.get('cause','Unknown Cause')}"
+            )
+
+            st.write(
+                cause.get(
+                    "business_impact",
+                    "No business impact available."
+                )
+            )
+
+
+# =====================================================
+# BUSINESS RISKS
+# =====================================================
+
+def show_risks(ai):
+
+    st.subheader("⚠ Business Risks")
+
+    risks = ai.get("risks", [])
+
+    if not risks:
+
+        st.success("No significant risks identified.")
+
+        return
+
+    severity_icons = {
+
+        "Critical": "🔴",
+
+        "High": "🟠",
+
+        "Medium": "🟡",
+
+        "Low": "🟢",
+
+    }
+
+    for risk in risks:
+
+        severity = risk.get("severity", "Medium")
+
+        icon = severity_icons.get(severity, "⚪")
+
+        with st.container(border=True):
+
+            st.markdown(
+                f"### {icon} {risk.get('risk','Business Risk')}"
+            )
+
+            st.markdown(
+                f"**Severity :** {severity}"
+            )
+
+            st.write(
+                risk.get(
+                    "mitigation",
+                    "No mitigation available."
+                )
+            )
+
+
+# =====================================================
+# OPPORTUNITIES
+# =====================================================
+
+def show_opportunities(ai):
+
+    st.subheader("🚀 Business Opportunities")
+
+    opportunities = ai.get("opportunities", [])
+
+    if not opportunities:
+
+        st.info("No opportunities identified.")
+
+        return
+
+    for opportunity in opportunities:
+
+        with st.container(border=True):
+
+            st.markdown(
+                f"### {opportunity.get('opportunity','Opportunity')}"
+            )
+
+            st.markdown(
+                f"**Potential Impact :** {opportunity.get('impact','-')}"
+            )
+
+            st.write(
+                opportunity.get(
+                    "recommended_action",
+                    "No recommendation available."
+                )
+            )
