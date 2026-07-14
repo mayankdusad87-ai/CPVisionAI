@@ -378,3 +378,58 @@ def show_opportunities(ai):
                     "No recommendation available."
                 )
             )
+# =====================================================
+# MANAGEMENT RECOMMENDATIONS
+# =====================================================
+
+def show_recommendations(ai):
+
+    st.subheader("🎯 Management Recommendations")
+
+    recommendations = ai.get("recommendations", [])
+
+    if not recommendations:
+
+        st.info("No recommendations available.")
+
+        return
+
+    priority_color = {
+
+        "High": "🔴",
+
+        "Medium": "🟠",
+
+        "Low": "🟢",
+
+    }
+
+    for rec in recommendations:
+
+        priority = rec.get("priority", "Medium")
+
+        icon = priority_color.get(priority, "⚪")
+
+        with st.container(border=True):
+
+            st.markdown(
+                f"### {icon} Priority : {priority}"
+            )
+
+            st.write(
+                f"**Recommendation** : {rec.get('action','-')}"
+            )
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+
+                st.caption(
+                    f"Owner : {rec.get('owner','-')}"
+                )
+
+            with col2:
+
+                st.caption(
+                    f"Timeline : {rec.get('timeline','-')}"
+                )
