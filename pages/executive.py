@@ -8,7 +8,7 @@ import streamlit as st
 def show_executive(result):
     
 
-    st.title("📊 Executive Report")
+    st.title("📊 Executive Intelligence Report")
 
 
     
@@ -37,7 +37,7 @@ def show_executive(result):
 
 def show_header(result):
 
-    st.title("📊 Executive Intelligence Brief")
+    st.subheader("📊 Executive Intelligence Brief")
 
     st.caption(
         f"{result.company_name} | {result.project_name}"
@@ -97,6 +97,34 @@ def show_business_brief(ai):
 # =====================================================
 
 def show_executive_summary(ai):
+
+    st.divider()
+
+    show_key_findings(ai)
+    
+    st.divider()
+    
+    show_root_causes(ai)
+    
+    st.divider()
+    
+    show_risks(ai)
+    
+    st.divider()
+    
+    show_opportunities(ai)
+    
+    st.divider()
+    
+    show_recommendations(ai)
+    
+    st.divider()
+    
+    show_monday_plan(ai)
+    
+    st.divider()
+    
+    show_leadership_questions(ai)
 
     st.subheader("📑 Executive Summary")
 
