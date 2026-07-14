@@ -203,6 +203,7 @@ class AnalysisService:
         try:
 
             result.ai_report = self.consulting.generate(result)
+        import traceback
 
         except Exception as ex:
 
