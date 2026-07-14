@@ -10,7 +10,6 @@ def show_executive(result):
 
     st.title("📊 Executive Report")
 
-    st.write("✅ EXECUTIVE PAGE LOADED")
 
     
 
