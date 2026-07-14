@@ -101,6 +101,68 @@ def show_executive_summary(ai):
     st.divider()
 
     show_key_findings(ai)
+
+    # =====================================================
+# KEY FINDINGS
+# =====================================================
+
+def show_key_findings(ai):
+
+    st.subheader("🔍 Key Findings")
+
+    findings = ai.get("key_findings", [])
+
+    if not findings:
+
+        st.info("No key findings available.")
+
+        return
+
+    severity_icons = {
+
+        "Critical": "🔴",
+
+        "High": "🟠",
+
+        "Medium": "🟡",
+
+        "Low": "🟢",
+
+    }
+
+    for finding in findings:
+
+        severity = finding.get("severity", "Medium")
+
+        icon = severity_icons.get(severity, "⚪")
+
+        with st.container(border=True):
+
+            st.markdown(
+                f"### {icon} {finding.get('title','Finding')}"
+            )
+
+            st.markdown(
+                f"**Severity:** {severity}"
+            )
+
+            st.write(
+                finding.get(
+                    "insight",
+                    "No insight available."
+                )
+            )
+
+            evidence = finding.get(
+                "evidence",
+                ""
+            )
+
+            if evidence:
+
+                st.caption(
+                    f"Evidence: {evidence}"
+                )
     
     st.divider()
     
