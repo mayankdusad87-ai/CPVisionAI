@@ -382,176 +382,25 @@ if st.session_state.full_dataframe is not None:
 
 
 
-# =====================================================
-# EXECUTIVE DASHBOARD
-# =====================================================
-
-if st.session_state.analysis_result is not None:
-
-    result = st.session_state.analysis_result
-
-    st.divider()
-
-    st.header("📊 Executive Dashboard")
-
-    st.caption(
-        f"Reporting Period : {result.metadata['reporting_period']}"
-    )
-
-    # -------------------------------------------------
-    # KPI CARDS
-    # -------------------------------------------------
-
-    c1, c2, c3 = st.columns(3)
-
-    with c1:
-
-        st.metric(
-            "Fresh Walk-ins",
-            result.metadata["fresh_walkins"],
-        )
-
-    with c2:
-
-        st.metric(
-            "Repeat Walk-ins",
-            result.metadata["unique_revisits"],
-        )
-
-    with c3:
-
-        st.metric(
-            "Bookings",
-            result.total_bookings,
-        )
-
-    c4, c5, c6 = st.columns(3)
-
-    with c4:
-
-        st.metric(
-            "Conversion %",
-            f"{result.conversion:.2f}%",
-        )
-
-    with c5:
-
-        st.metric(
-            "Participating CP",
-            result.metadata["participating_cp"],
-        )
-
-    with c6:
-
-        st.metric(
-            "Total Walk-ins",
-            result.metadata["total_walkins"],
-        )
-
-    st.divider()
-
-   
-# =====================================================
-# KPI VALIDATION (TEMPORARY)
-# =====================================================
-
-    with st.expander("🔍 KPI Validation (Temporary)"):
-    
-        st.json({
-    
-            "Reporting Period":
-                result.metadata["reporting_period"],
-    
-            "Total Walk-ins":
-                result.metadata["total_walkins"],
-    
-            "Fresh Walk-ins":
-                result.metadata["fresh_walkins"],
-    
-            "Unique Revisits":
-                result.metadata["unique_revisits"],
-    
-            "Bookings":
-                result.total_bookings,
-    
-            "Conversion %":
-                result.conversion,
-    
-           "Participating CP":
-                result.metadata["participating_cp"],
-    
-        })
-
-    # -------------------------------------------------
-    # BUSINESS BRIEF
-    # -------------------------------------------------
-
-    st.subheader("📌 Business Brief")
-
-    st.info(
-
-        f"""
-During **{result.metadata['reporting_period']}**, the business generated **{result.metadata['total_walkins']} Channle Partner walk-ins**, resulting in **{result.total_bookings} bookings** with a **{result.conversion:.2f}% conversion rate**.
-
-A total of **{result.metadata['participating_cp']} Participating CP** contributed during this reporting period.
-"""
-    )
-
-    # -------------------------------------------------
-    # EXECUTIVE SUMMARY
-    # -------------------------------------------------
-
-    st.subheader("📝 Executive Summary")
-
-    st.write(result.executive_summary)
-
-    # -------------------------------------------------
-    # RECOMMENDATIONS
-    # -------------------------------------------------
-
-    st.subheader("🎯 Recommendations")
-
-    recommendations = result.recommendations
-
-    if isinstance(recommendations, list):
-
-        for item in recommendations:
-
-            st.markdown(f"✅ {item}")
-
-    else:
-
-        st.write(recommendations)
-
-    # -------------------------------------------------
-    # PARTNER PERFORMANCE
-    # -------------------------------------------------
-
-# =====================================================
-# PARTNER INTELLIGENCE
-# =====================================================
-
-
-
-if selected_page == "🏆 Partner Intelligence":
-
-    st.title("🏆 Partner Intelligence")
-
-    if st.session_state.analysis_result is None:
-
-        st.info("Please analyse a tracker first.")
-
-    else:
-
-        result = st.session_state.analysis_result
-
-        st.subheader("Channel Partner Performance")
-
-        st.dataframe(
-            result.metadata["partner_table"],
-            use_container_width=True,
-            hide_index=True,
-        )
+        # =====================================================
+        # EXECUTIVE DASHBOARD
+        # =====================================================
+        if st.session_state.analysis_result is not None:
         
-       
-
+            result = st.session_state.analysis_result
+        
+            if selected_page == "🏠 Dashboard":
+        
+                show_dashboard(result)
+        
+            elif selected_page == "📈 Executive Report":
+        
+                show_executive(result)
+        
+            elif selected_page == "🏆 Partner Intelligence":
+        
+                show_partner_page(result)
+        
+            else:
+        
+                st.info("Coming Soon")
