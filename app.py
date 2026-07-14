@@ -245,6 +245,8 @@ if selected_page == "🏠 Dashboard":
         # =========================================================
         
         if st.session_state.full_dataframe is not None:
+            st.write("Selected Page:", selected_page)
+            st.write("Analysis Result Exists:", st.session_state.analysis_result is not None)
         
             st.divider()
         
