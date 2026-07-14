@@ -525,7 +525,7 @@ A total of **{result.metadata['participating_cp']} Participating CP** contribute
 # PARTNER INTELLIGENCE
 # =====================================================
 
-elif selected_page == "🏆 Partner Intelligence":
+if selected_page == "🏆 Partner Intelligence":
 
     st.title("🏆 Partner Intelligence")
 
@@ -537,14 +537,13 @@ elif selected_page == "🏆 Partner Intelligence":
 
         result = st.session_state.analysis_result
 
-        st.subheader("Partner Performance")
-
-        partner_table = result.metadata["partner_table"]
+        st.subheader("Channel Partner Performance")
 
         st.dataframe(
-            partner_table,
+            result.metadata["partner_table"],
             use_container_width=True,
             hide_index=True,
         )
+        
        
 
