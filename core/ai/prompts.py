@@ -146,11 +146,11 @@ Every recommendation MUST satisfy ALL conditions:
 
 Never recommend generic actions such as:
 
-• Improve sales
+  Improve sales
 
-• Improve follow-up
+  Improve follow-up
 
-• Increase marketing
+  Increase marketing
 
 unless the supplied evidence directly supports them.
 
