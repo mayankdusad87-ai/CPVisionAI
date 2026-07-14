@@ -29,24 +29,39 @@ class AIResponseValidator:
 
     DEFAULT_RESPONSE = {
 
+        "health_snapshot": {
+    
+            "status": "",
+    
+            "score": 0,
+    
+            "confidence": 0,
+    
+            "management_priority": ""
+    
+        },
+    
+        "business_brief": "",
+    
         "executive_summary": "",
-
+    
+        "diagnosis": "",
+    
         "key_findings": [],
-
+    
         "root_causes": [],
-
+    
         "risks": [],
-
+    
         "opportunities": [],
-
+    
         "recommendations": [],
-
+    
         "monday_plan": [],
-
+    
         "leadership_questions": [],
-
+    
     }
-
     # =====================================================
     # PUBLIC
     # =====================================================
@@ -99,21 +114,28 @@ class AIResponseValidator:
 
         required = [
 
+            "health_snapshot",
+            "business_brief",
+
             "executive_summary",
-
+        
+            "diagnosis",
+        
             "key_findings",
-
+        
             "root_causes",
-
+        
             "risks",
-
+        
             "opportunities",
-
+        
             "recommendations",
-
+        
             "monday_plan",
-
+        
             "leadership_questions",
+
+
 
         ]
 
