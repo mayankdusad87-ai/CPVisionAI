@@ -33,17 +33,28 @@ def show_executive(result):
     show_key_findings(ai)
 
     st.divider()
-    
+
     show_root_causes(ai)
-    
+
     st.divider()
-    
+
     show_risks(ai)
-    
+
     st.divider()
-    
+
     show_opportunities(ai)
 
+    st.divider()
+
+    show_recommendations(ai)
+
+    st.divider()
+
+    show_monday_plan(ai)
+
+    st.divider()
+
+    show_leadership_questions(ai)   
     # Remaining sections will be added in Part 2
 
 
