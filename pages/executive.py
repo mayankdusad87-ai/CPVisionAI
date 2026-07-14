@@ -1,27 +1,103 @@
 import streamlit as st
 
 
+# =====================================================
+# PAGE
+# =====================================================
+
 def show_executive(result):
 
-    st.header("📈 Executive Report")
+    ai = result.ai_report or {}
 
-    st.subheader("Business Brief")
+    show_header(result)
+
+    st.divider()
+
+    show_health_snapshot(ai)
+
+    st.divider()
+
+    show_business_brief(ai)
+
+    st.divider()
+
+    show_executive_summary(ai)
+
+    # STOP HERE FOR NOW
+
+
+# =====================================================
+# HEADER
+# =====================================================
+
+def show_header(result):
+
+    st.title("📊 Executive Intelligence Brief")
+
+    st.caption(
+        f"{result.company_name} | {result.project_name}"
+    )
+
+    st.caption(
+        f"Reporting Period : {result.metadata['reporting_period']}"
+    )
+
+
+# =====================================================
+# HEALTH SNAPSHOT
+# =====================================================
+
+def show_health_snapshot(ai):
+
+    health = ai.get("health_snapshot", {})
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.metric("Business Health", health.get("status", "Pending"))
+
+    with col2:
+        st.metric("Health Score", health.get("score", "--"))
+
+    with col3:
+        st.metric("Confidence", f"{health.get('confidence', 0)}%")
 
     st.info(
-        result.ai_report.get(
-            "business_brief",
-            "No Business Brief"
+        "**Primary Management Focus**\n\n"
+        + health.get(
+            "management_priority",
+            "Awaiting AI analysis."
         )
     )
 
-    st.subheader("Executive Summary")
+
+# =====================================================
+# BUSINESS BRIEF
+# =====================================================
+
+def show_business_brief(ai):
+
+    st.subheader("📌 Business Brief")
 
     st.write(
-        result.executive_summary
+        ai.get(
+            "business_brief",
+            "Awaiting AI analysis."
+        )
     )
 
-    st.subheader("Recommendations")
 
-    for item in result.recommendations:
+# =====================================================
+# EXECUTIVE SUMMARY
+# =====================================================
 
-        st.write("•", item)
+def show_executive_summary(ai):
+
+    st.subheader("📑 Executive Summary")
+
+    st.write(
+        ai.get(
+            "executive_summary",
+            "Awaiting AI analysis."
+        )
+    )
