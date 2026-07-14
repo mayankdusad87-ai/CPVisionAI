@@ -129,10 +129,10 @@ class ConsultingEngine:
             user_prompt=user_prompt,
 
         )
-          print("=" * 80)
-          print("STEP 4 - RAW AI RESPONSE")
-          print(response)
-          print("=" * 80)
+       print("=" * 80)
+       print("STEP 4 - RAW AI RESPONSE")
+       print(response)
+       print("=" * 80)
         return self.validator.validate(response)
 
     # =====================================================
