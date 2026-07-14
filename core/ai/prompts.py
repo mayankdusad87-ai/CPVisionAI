@@ -54,8 +54,7 @@ Every insight should help leadership make better decisions.
 # =========================================================
 EXECUTIVE_SUMMARY_PROMPT = """
 ========================================================
-OBJECTIVE
-========================================================
+
 
 Prepare an Executive Consulting Report for the CEO and Leadership Team.
 
