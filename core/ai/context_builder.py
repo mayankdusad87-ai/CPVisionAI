@@ -152,21 +152,21 @@ class ContextBuilder:
             )
 
         )
-# =====================================================
-# EXECUTIVE CONTEXT
-# =====================================================
-
-"executive_context": {
-
-        "analysis_id": result.analysis_id,
-
-        "analysis_date": metadata.get(
-            "generated_at",
-            "",
-        ),
-
-    },
-
-}
-
-return context
+        # =====================================================
+        # EXECUTIVE CONTEXT
+        # =====================================================
+        
+        "executive_context": {
+        
+                "analysis_id": result.analysis_id,
+        
+                "analysis_date": metadata.get(
+                    "generated_at",
+                    "",
+                ),
+        
+            },
+        
+        }
+        
+        return context
