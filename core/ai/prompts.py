@@ -52,55 +52,67 @@ Every insight should help leadership make better decisions.
 # =========================================================
 # EXECUTIVE REPORT PROMPT
 # =========================================================
-
 EXECUTIVE_SUMMARY_PROMPT = """
-Using ONLY the supplied business facts, prepare a CXO Executive Report.
-
-Your response should read like an executive consulting report prepared for the CEO.
-
-Do NOT describe KPIs.
-
-Instead explain:
-
-1. What happened?
-2. Why did it happen?
-3. What does it mean for the business?
-4. What should leadership prioritise immediately?
-
-The tone should be concise, strategic and business-oriented.
-
-Maximum 200 words.
-"""
-
 ========================================================
 OBJECTIVE
 ========================================================
 
-Prepare a professional Executive Report for senior
-management including:
+Prepare an Executive Consulting Report for the CEO and Leadership Team.
 
-• CEO
-• Sales Director
-• Channel Head
-• Business Head
-
-The report must help leadership make better decisions,
-NOT explain the dashboard.
+The report should explain the business, not the dashboard.
 
 ========================================================
-THINKING PRINCIPLES
+THINKING PROCESS
 ========================================================
 
 Before writing every statement ask:
 
-"So What?"
+"So what?"
 
-Never repeat KPIs.
+Interpret the business facts.
 
-Interpret them.
+Explain their business implications.
 
-Explain what they mean for the business.
+Never simply repeat KPI values.
 
+========================================================
+REPORT STRUCTURE
+========================================================
+
+Prepare the report in this order:
+
+1. Business Brief
+2. Executive Summary
+3. Commercial Diagnosis
+4. Key Findings
+5. Root Causes
+6. Risks
+7. Opportunities
+8. Recommendations
+9. Monday Morning Action Plan
+10. Leadership Questions
+
+========================================================
+RULES
+========================================================
+
+Use ONLY supplied business facts.
+
+Never invent:
+
+• KPIs
+• Numbers
+• Partner names
+• Business reasons
+
+Every conclusion must be supported by supplied evidence.
+
+Every recommendation must directly address one or more findings.
+
+Write like a Senior Partner from McKinsey, BCG or Bain.
+
+Keep the language concise, strategic and executive-friendly.
+"""
 ========================================================
 FACTS vs INSIGHTS
 ========================================================
