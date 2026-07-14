@@ -7,6 +7,12 @@ Application Entry Point
 Version : 2.1
 =========================================================
 """
+from pages.dashboard import show_dashboard
+
+from pages.executive import show_executive
+
+from pages.partner_intelligence import show_partner_page
+
 
 from pathlib import Path
 
