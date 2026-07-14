@@ -433,3 +433,30 @@ def show_recommendations(ai):
                 st.caption(
                     f"Timeline : {rec.get('timeline','-')}"
                 )
+# =====================================================
+# MONDAY MORNING ACTION PLAN
+# =====================================================
+
+def show_monday_plan(ai):
+
+    st.subheader("📅 Monday Morning Action Plan")
+
+    plan = ai.get("monday_plan", [])
+
+    if not plan:
+
+        st.info("No immediate action plan available.")
+
+        return
+
+    for index, task in enumerate(plan, start=1):
+
+        st.checkbox(
+
+            f"Action {index} : {task}",
+
+            value=False,
+
+            disabled=True,
+
+        )
