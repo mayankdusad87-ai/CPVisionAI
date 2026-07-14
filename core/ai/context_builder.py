@@ -61,7 +61,7 @@ class ContextBuilder:
             # EXECUTIVE KPI
             # =====================================================
 
-            "dashboard": {
+            "business_snapshot": {
 
                 "total_walkins":
                     metadata.get(
@@ -99,21 +99,21 @@ class ContextBuilder:
             # TABLES
             # =====================================================
 
-            "partner_table":
+            "partner_intelligence":
 
                 metadata.get(
                     "partner_summary",
                     {},
                 ),
 
-            "customer_journey":
+            "customer_intelligence":
 
                 metadata.get(
                     "customer_journey",
                     {},
                 ),
 
-            "booking_summary":
+            "booking_intelligence":
 
                 metadata.get(
                     "booking_summary",
@@ -124,15 +124,7 @@ class ContextBuilder:
             # EXISTING AI
             # =====================================================
 
-            "existing_summary":
-
-                result.executive_summary,
-
-            "existing_recommendations":
-
-                result.recommendations,
-
-        }
+            
 
         return context
 
@@ -160,3 +152,17 @@ class ContextBuilder:
             )
 
         )
+# =====================================================
+# EXECUTIVE CONTEXT
+# =====================================================
+
+"executive_context": {
+
+    "analysis_id": result.analysis_id,
+
+    "analysis_date": metadata.get(
+        "generated_at",
+        "",
+    ),
+
+},
