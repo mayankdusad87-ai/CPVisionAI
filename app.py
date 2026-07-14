@@ -158,145 +158,145 @@ if selected_page == "🏠 Dashboard":
     )
 
     st.divider()
- # =========================================================
-# UPLOAD SECTION
-# =========================================================
-
-st.subheader("📂 Upload Monthly Tracker")
-
-uploaded_file = st.file_uploader(
-    "Upload ChannelIQ Excel Tracker",
-    type=["xlsx", "xls"],
-    help="Upload the latest Channel Partner tracker.",
-)
-
-# =========================================================
-# READ EXCEL
-# =========================================================
-
-if uploaded_file is not None:
-
-    file_changed = (
-
-        st.session_state.uploaded_file is None
-
-        or
-
-        uploaded_file.name
-        != st.session_state.uploaded_file.name
-
+    # =========================================================
+    # UPLOAD SECTION
+    # =========================================================
+    
+    st.subheader("📂 Upload Monthly Tracker")
+    
+    uploaded_file = st.file_uploader(
+        "Upload ChannelIQ Excel Tracker",
+        type=["xlsx", "xls"],
+        help="Upload the latest Channel Partner tracker.",
     )
-
-    if file_changed:
-
-        try:
-
-            with st.spinner(
-                "Reading Excel Tracker..."
-            ):
-
-                reader = ExcelReader()
-
-                full_df = reader.read(
-                    uploaded_file
-                )
-
-                reporting = ReportingPeriod()
-
-                periods = reporting.available_periods(
-                    full_df
-                )
-
-                latest = reporting.latest_period(
-                    full_df
-                )
-
-                # -----------------------------
-                # SESSION
-                # -----------------------------
-
-                st.session_state.uploaded_file = uploaded_file
-
-                st.session_state.full_dataframe = full_df
-
-                st.session_state.available_periods = periods
-
-                st.session_state.selected_period = latest
-
-                # Reset previous analysis
-
-                st.session_state.analysis_result = None
-
-            st.success(
-                f"Tracker loaded successfully "
-                f"({len(full_df):,} records)"
-            )
-
-        except Exception as ex:
-
-            st.error(
-                "Unable to read uploaded tracker."
-            )
-
-            st.exception(ex)
-
-# =========================================================
-# DATASET SUMMARY
-# =========================================================
-
-if st.session_state.full_dataframe is not None:
-
-    st.divider()
-
-    st.subheader("Dataset Summary")
-
-    c1, c2, c3 = st.columns(3)
-
-    with c1:
-
-        st.metric(
-
-            "Total Records",
-
-            len(
-                st.session_state.full_dataframe
-            ),
-
+    
+    # =========================================================
+    # READ EXCEL
+    # =========================================================
+    
+    if uploaded_file is not None:
+    
+        file_changed = (
+    
+            st.session_state.uploaded_file is None
+    
+            or
+    
+            uploaded_file.name
+            != st.session_state.uploaded_file.name
+    
         )
-
-    with c2:
-
-        st.metric(
-
-            "Reporting Periods",
-
-            len(
-                st.session_state.available_periods
-            ),
-
-        )
-
-    with c3:
-
-        st.metric(
-
-            "Latest Period",
-
-            st.session_state.selected_period,
-
-        ) 
-        
-# =========================================================
-# ANALYSIS SETTINGS
-# =========================================================
-
-if st.session_state.full_dataframe is not None:
-
-    st.divider()
-
-    st.subheader("⚙ Analysis Settings")
-
-    left, right = st.columns(2)
+    
+        if file_changed:
+    
+            try:
+    
+                with st.spinner(
+                    "Reading Excel Tracker..."
+                ):
+    
+                    reader = ExcelReader()
+    
+                    full_df = reader.read(
+                        uploaded_file
+                    )
+    
+                    reporting = ReportingPeriod()
+    
+                    periods = reporting.available_periods(
+                        full_df
+                    )
+    
+                    latest = reporting.latest_period(
+                        full_df
+                    )
+    
+                    # -----------------------------
+                    # SESSION
+                    # -----------------------------
+    
+                    st.session_state.uploaded_file = uploaded_file
+    
+                    st.session_state.full_dataframe = full_df
+    
+                    st.session_state.available_periods = periods
+    
+                    st.session_state.selected_period = latest
+    
+                    # Reset previous analysis
+    
+                    st.session_state.analysis_result = None
+    
+                st.success(
+                    f"Tracker loaded successfully "
+                    f"({len(full_df):,} records)"
+                )
+    
+            except Exception as ex:
+    
+                st.error(
+                    "Unable to read uploaded tracker."
+                )
+    
+                st.exception(ex)
+    
+    # =========================================================
+    # DATASET SUMMARY
+    # =========================================================
+    
+    if st.session_state.full_dataframe is not None:
+    
+        st.divider()
+    
+        st.subheader("Dataset Summary")
+    
+        c1, c2, c3 = st.columns(3)
+    
+        with c1:
+    
+            st.metric(
+    
+                "Total Records",
+    
+                len(
+                    st.session_state.full_dataframe
+                ),
+    
+            )
+    
+        with c2:
+    
+            st.metric(
+    
+                "Reporting Periods",
+    
+                len(
+                    st.session_state.available_periods
+                ),
+    
+            )
+    
+        with c3:
+    
+            st.metric(
+    
+                "Latest Period",
+    
+                st.session_state.selected_period,
+    
+            ) 
+            
+    # =========================================================
+    # ANALYSIS SETTINGS
+    # =========================================================
+    
+    if st.session_state.full_dataframe is not None:
+    
+        st.divider()
+    
+        st.subheader("⚙ Analysis Settings")
+    
+        left, right = st.columns(2)
 
     # -----------------------------------------------------
     # COMPANY / PROJECT
