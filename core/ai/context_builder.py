@@ -113,6 +113,22 @@ class ContextBuilder:
             ),    
         }
 
+        import json
+
+        print("=" * 80)
+        print("AI CONTEXT")
+        print("=" * 80)
+
+        print(
+            json.dumps(
+                context,
+                indent=4,
+                default=str,
+            )
+        )
+
+        print("=" * 80)
+
         return context
         
 
