@@ -165,6 +165,34 @@ BUSINESS FACTS
 
 ========================================================
 
+EXECUTIVE BUSINESS CONTEXT
+
+Company
+
+{payload["context"]["company"]}
+
+------------------------------------------------
+
+BUSINESS SNAPSHOT
+
+{payload["context"]["business_snapshot"]}
+
+------------------------------------------------
+
+COMMERCIAL INTELLIGENCE
+
+{payload["context"].get("commercial_intelligence", {})}
+
+------------------------------------------------
+
+KEY VERIFIED FINDINGS
+
+{payload["findings"]["findings"]}
+
+------------------------------------------------
+
+BUSINESS FACTS (FULL)
+
 {json.dumps(payload, indent=4, default=str)}
 
 ========================================================
