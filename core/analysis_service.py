@@ -201,26 +201,33 @@ class AnalysisService:
         # TEST - COMMERCIAL CONVERSION SIGNAL
         # ----------------------------------------------
 
-        print("=" * 80)
-        print("DATAFRAME COLUMNS")
-        print("=" * 80)
-        
-        for col in df.columns:
-            print(repr(col))
-        
-        print("=" * 80)
+
                 
         from core.intelligence.conversion_signal import ConversionSignal
         
         signal = ConversionSignal().analyse(df)
+
+        result.metadata["commercial_intelligence"] = {
+
+        "title": signal.title,
+    
+        "category": signal.category,
+    
+        "severity": signal.severity,
+    
+        "status": signal.status,
+    
+        "summary": signal.summary,
+    
+        "business_impact": signal.business_impact,
+    
+        "management_question": signal.management_question,
+    
+        "evidence": signal.evidence,    
+
+  }
         
-        print("\n" + "=" * 80)
-        print("COMMERCIAL CONVERSION SIGNAL")
-        print("=" * 80)
         
-        print(signal)
-        
-        print("=" * 80 + "\n")
 
 
         
