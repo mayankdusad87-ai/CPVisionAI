@@ -197,6 +197,24 @@ class AnalysisService:
             "generated_at": datetime.now(),
 
         }
+        # ----------------------------------------------
+        # TEST - COMMERCIAL CONVERSION SIGNAL
+        # ----------------------------------------------
+        
+        from core.intelligence.conversion_signal import ConversionSignal
+        
+        signal = ConversionSignal().analyse(df)
+        
+        print("\n" + "=" * 80)
+        print("COMMERCIAL CONVERSION SIGNAL")
+        print("=" * 80)
+        
+        print(signal)
+        
+        print("=" * 80 + "\n")
+
+
+        
 
         # ----------------------------------------------
         # AI Consulting
