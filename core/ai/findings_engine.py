@@ -47,6 +47,10 @@ class FindingsEngine:
             "partner_intelligence",
             {},
         )
+        commercial = context.get(
+           "commercial_intelligence",
+           {},
+       )
 
         # -----------------------------------------------
         # KPI Findings
