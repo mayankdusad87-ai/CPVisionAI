@@ -16,18 +16,33 @@ from core.intelligence.signal import Signal
 
 
 class ConversionSignal:
-
     """
-    Calculates Commercial Conversion Intelligence.
+    Commercial Conversion Intelligence
+
+    Business Dictionary
+
+    Overall Fresh Walk-ins
+        Customer Fresh/Revisit = Fresh
+
+    Overall Bookings
+        Booking Done = Y
+
+    CP Fresh Walk-ins
+        Source = Channel Partner
+        AND Fresh
+
+    CP Bookings
+        Source = Channel Partner
+        AND Booking Done = Y
     """
 
     def analyse(self, df):
 
-        # ------------------------------------------
-        # Overall Walk-ins (Fresh only)
-        # ------------------------------------------
+        # ==================================================
+        # Overall Fresh Walk-ins
+        # ==================================================
 
-        overall_walkins = len(
+        overall_fresh_walkins = len(
 
             df[
                 df["customer_fresh_revisit"]
@@ -39,9 +54,9 @@ class ConversionSignal:
 
         )
 
-        # ------------------------------------------
+        # ==================================================
         # Overall Bookings
-        # ------------------------------------------
+        # ==================================================
 
         overall_bookings = len(
 
@@ -55,81 +70,99 @@ class ConversionSignal:
 
         )
 
-        # ------------------------------------------
-        # CP Walk-ins
-        # ------------------------------------------
+        # ==================================================
+        # CP Fresh Walk-ins
+        # ==================================================
 
-        cp_walkins_df = df[
-
-            (df["source"].astype(str).str.strip().str.upper() == "CHANNEL PARTNER")
-
-            &
-
-            (
-                df["customer_fresh_revisit"]
-                .astype(str)
-                .str.strip()
-                .str.upper()
-                == "FRESH"
-            )
-
-        ]
-
-        cp_walkins = len(cp_walkins_df)
-
-        # ------------------------------------------
-        # CP Bookings
-        # ------------------------------------------
-
-        cp_bookings = len(
+        cp_fresh_walkins = len(
 
             df[
 
-                (df["source"].astype(str).str.strip().str.upper() == "CHANNEL PARTNER")
-
-                &
-
-                (
-                    df["booking_done"]
+                (df["source"]
                     .astype(str)
                     .str.strip()
                     .str.upper()
-                    == "Y"
-                )
+                    == "CHANNEL PARTNER")
+
+                &
+
+                (df["customer_fresh_revisit"]
+                    .astype(str)
+                    .str.strip()
+                    .str.upper()
+                    == "FRESH")
 
             ]
 
         )
 
-        # ------------------------------------------
+        # ==================================================
+        # CP Bookings
+        # ==================================================
+
+        cp_bookings = len(
+
+            df[
+
+                (df["source"]
+                    .astype(str)
+                    .str.strip()
+                    .str.upper()
+                    == "CHANNEL PARTNER")
+
+                &
+
+                (df["booking_done"]
+                    .astype(str)
+                    .str.strip()
+                    .str.upper()
+                    == "Y")
+
+            ]
+
+        )
+
+        # ==================================================
         # Conversion
-        # ------------------------------------------
+        # ==================================================
 
         overall_conversion = (
 
-            overall_bookings / overall_walkins * 100
+            overall_bookings / overall_fresh_walkins * 100
 
-            if overall_walkins else 0
+            if overall_fresh_walkins
+
+            else 0
 
         )
 
         cp_conversion = (
 
-            cp_bookings / cp_walkins * 100
+            cp_bookings / cp_fresh_walkins * 100
 
-            if cp_walkins else 0
+            if cp_fresh_walkins
+
+            else 0
 
         )
 
-        gap = cp_conversion - overall_conversion
+        conversion_gap = (
 
-        # ------------------------------------------
+            cp_conversion - overall_conversion
+
+        )
+
+        # ==================================================
         # Expected Bookings
-        # ------------------------------------------
+        # ==================================================
 
         expected_cp_bookings = (
 
-            cp_walkins * overall_conversion / 100
+            cp_fresh_walkins
+
+            * overall_conversion
+
+            / 100
 
         )
 
@@ -149,61 +182,75 @@ class ConversionSignal:
 
         )
 
-        # ------------------------------------------
+        # ==================================================
         # Severity
-        # ------------------------------------------
+        # ==================================================
 
-        if gap >= 0:
-
-            severity = "Excellent"
-
-            status = "Positive"
-
-        elif gap >= -1:
-
-            severity = "Low"
-
-            status = "Neutral"
-
-        elif gap >= -3:
-
-            severity = "Medium"
-
-            status = "Negative"
-
-        else:
+        if overall_bookings == 0:
 
             severity = "Critical"
 
             status = "Negative"
 
-        # ------------------------------------------
-        # Business Summary
-        # ------------------------------------------
-
-        if gap >= 0:
-
             summary = (
 
-                "Channel Partner conversion is meeting or exceeding "
-
-                "overall project conversion."
+                "No bookings were recorded during the reporting period."
 
             )
 
         else:
 
-            summary = (
+            if conversion_gap >= 0:
 
-                "Channel Partner conversion is below "
+                severity = "Excellent"
 
-                "overall project conversion."
+                status = "Positive"
 
-            )
+                summary = (
 
-        # ------------------------------------------
+                    "Channel Partner conversion is meeting or exceeding the overall project conversion."
+
+                )
+
+            elif conversion_gap >= -1:
+
+                severity = "Low"
+
+                status = "Neutral"
+
+                summary = (
+
+                    "Channel Partner conversion is marginally below the project average."
+
+                )
+
+            elif conversion_gap >= -3:
+
+                severity = "Medium"
+
+                status = "Negative"
+
+                summary = (
+
+                    "Channel Partner conversion is below the project benchmark and requires management attention."
+
+                )
+
+            else:
+
+                severity = "Critical"
+
+                status = "Negative"
+
+                summary = (
+
+                    "Channel Partner conversion is significantly below the project benchmark."
+
+                )
+
+        # ==================================================
         # Signal
-        # ------------------------------------------
+        # ==================================================
 
         signal = Signal(
 
@@ -223,33 +270,33 @@ class ConversionSignal:
 
                 f"Estimated opportunity of "
 
-                f"{lost_bookings} additional bookings."
+                f"{lost_bookings} additional bookings "
+
+                f"worth approximately ₹{revenue_opportunity:,.0f}."
 
             ),
 
             management_question=(
 
-                "Is the Channel Partner network "
-
-                "helping or hurting project conversion?"
+                "Is the Channel Partner network helping or hurting overall project conversion?"
 
             ),
 
             evidence={
 
-                "overall_walkins": overall_walkins,
+                "overall_fresh_walkins": overall_fresh_walkins,
 
                 "overall_bookings": overall_bookings,
 
-                "overall_conversion": round(overall_conversion,2),
+                "overall_conversion": round(overall_conversion, 2),
 
-                "cp_walkins": cp_walkins,
+                "cp_fresh_walkins": cp_fresh_walkins,
 
                 "cp_bookings": cp_bookings,
 
-                "cp_conversion": round(cp_conversion,2),
+                "cp_conversion": round(cp_conversion, 2),
 
-                "gap": round(gap,2),
+                "conversion_gap": round(conversion_gap, 2),
 
                 "expected_cp_bookings": round(expected_cp_bookings),
 
