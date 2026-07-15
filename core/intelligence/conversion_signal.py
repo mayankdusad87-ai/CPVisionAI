@@ -208,8 +208,9 @@ class ConversionSignal:
 
                 summary = (
 
-                    "Channel Partner conversion is meeting or exceeding the overall project conversion."
-
+                     f"Channel Partner conversion ({cp_conversion:.2f}%) "
+                     f"exceeded the overall project conversion "
+                     f"({overall_conversion:.2f}%) during the reporting period."
                 )
 
             elif conversion_gap >= -1:
@@ -220,7 +221,10 @@ class ConversionSignal:
 
                 summary = (
 
-                    "Channel Partner conversion is marginally below the project average."
+                    f"Channel Partner conversion ({cp_conversion:.2f}%) "
+                    f"was marginally below the overall project conversion "
+                    f"({overall_conversion:.2f}%)."
+
 
                 )
 
@@ -232,10 +236,10 @@ class ConversionSignal:
 
                 summary = (
 
-                    "Channel Partner conversion is below the project benchmark and requires management attention."
-
+                    f"Channel Partner conversion ({cp_conversion:.2f}%) "
+                    f"was below the overall project conversion "
+                    f"({overall_conversion:.2f}%), indicating reduced commercial effectiveness." 
                 )
-
             else:
 
                 severity = "Critical"
