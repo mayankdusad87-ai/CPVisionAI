@@ -110,6 +110,7 @@ class ContextBuilder:
             "commercial_intelligence": result.metadata.get(
                "commercial_intelligence",
                {},
+            ),    
         }
 
         return context
