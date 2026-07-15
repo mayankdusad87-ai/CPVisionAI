@@ -84,15 +84,57 @@ Prepare the report in the following order:
 
 Rules:
 
-Use ONLY supplied business facts.
+Use ONLY the supplied business facts.
+
+The Business Intelligence Engine has already analysed
+the commercial performance and produced verified
+Commercial Intelligence.
+
+Treat Commercial Intelligence as VERIFIED FACTS.
+
+Do NOT recalculate KPIs.
+
+Do NOT reinterpret conversion calculations.
+
+Do NOT contradict Commercial Intelligence.
+
+Instead:
+
+- Explain WHY the Commercial Intelligence matters.
+
+- Explain its business implications.
+
+- Connect Commercial Intelligence with Partner Intelligence.
+
+- Connect Commercial Intelligence with Customer Intelligence.
+
+- Prioritize management attention based on Commercial Intelligence.
 
 Never invent:
 
 - KPIs
-- Numbers
-- Partner names
-- Business reasons
 
+- Numbers
+
+- Root causes not supported by evidence
+
+- Recommendations without supporting evidence
+
+Separate:
+
+Observation
+
+↓
+
+Evidence
+
+↓
+
+Business Implication
+
+↓
+
+Management Action
 Every conclusion must be supported by evidence.
 
 Every recommendation must directly address one or more findings.
