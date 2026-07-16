@@ -8,184 +8,237 @@ Executive Workspace
 """
 
 import streamlit as st
-from html import escape
 
 
 class ExecutiveWorkspace:
 
     def render(self, result, ai):
 
-        html = self._build_page(result, ai)
-
-        st.markdown(
-            html,
-            unsafe_allow_html=True,
-        )
-
-    def _build_page(
-        self,
-        result,
-        ai,
-):
-
         health = ai.get("health_snapshot", {})
-    
-        status = health.get("status", "-")
-        score = health.get("score", "-")
-        confidence = health.get("confidence", 0)
-        priority = health.get("management_priority", "Not Available")
-    
+
         reporting_period = result.metadata.get(
             "reporting_period",
             "-",
-    )
+        )
 
-    analysis_id = result.analysis_id
+        analysis_id = result.analysis_id
 
-    html = f"""
+        status = health.get("status", "-")
+        score = health.get("score", "-")
+        confidence = health.get("confidence", 0)
+        priority = health.get(
+            "management_priority",
+            "No Priority",
+        )
 
-<div class="executive-wrapper">
+        # --------------------------------------------------
+        # Header
+        # --------------------------------------------------
 
-    <div class="executive-card">
+        st.markdown(
+            """
+            <div class="executive-wrapper">
 
-        <div class="executive-top">
+                <div class="executive-card">
 
-            <div>
+                    <div class="executive-top">
 
-                <div class="executive-title">
+                        <div>
 
-                    📊 Executive Intelligence Report
+                            <div class="executive-title">
+                                📊 Executive Intelligence Report
+                            </div>
 
-                </div>
+                            <div class="executive-subtitle">
+                                AI Powered Business Intelligence
+                            </div>
 
-                <div class="executive-subtitle">
+                        </div>
 
-                    Executive Intelligence Brief
+                        <div class="metadata-card">
 
-                </div>
+                            <div class="meta-label">
+                                REPORTING PERIOD
+                            </div>
 
-            </div>
+                            <div class="meta-value">
+            """
+            + str(reporting_period)
+            + """
+                            </div>
 
-            <div class="metadata-card">
+                            <div class="meta-label">
+                                ANALYSIS ID
+                            </div>
 
-                <div class="meta-label">
+                            <div class="meta-value">
+            """
+            + str(analysis_id)
+            + """
+                            </div>
 
-                    Reporting Period
+                        </div>
 
-                </div>
-
-                <div class="meta-value">
-
-                    {escape(str(reporting_period))}
-
-                </div>
-
-                <div class="meta-label">
-
-                    Analysis ID
-
-                </div>
-
-                <div class="meta-value">
-
-                    {escape(str(analysis_id))}
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="metric-grid">
-
-            <div class="metric-box">
-
-                <div class="metric-label">
-
-                    SENTIMENT
-
-                </div>
-
-                <div class="metric-number">
-
-                    {escape(str(status))}
-
-                </div>
-
-                <div class="metric-description">
-
-                    Overall Business Outlook
+                    </div>
 
                 </div>
 
             </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-            <div class="metric-box">
+        st.markdown("### Executive Intelligence Brief")
 
-                <div class="metric-label">
+        st.write("")
 
-                    HEALTH SCORE
+        # --------------------------------------------------
+        # KPI Tiles
+        # --------------------------------------------------
 
-                </div>
+        col1, col2, col3 = st.columns(3)
 
-                <div class="metric-number">
+        with col1:
 
-                    {escape(str(score))}
+            st.markdown(
+                f"""
+<div class="metric-box">
 
-                </div>
+<div class="metric-label">
 
-                <div class="metric-description">
-
-                    Overall Business Health
-
-                </div>
-
-            </div>
-
-            <div class="metric-box">
-
-                <div class="metric-label">
-
-                    AI CONFIDENCE
-
-                </div>
-
-                <div class="metric-number">
-
-                    {escape(str(confidence))}%
-
-                </div>
-
-                <div class="metric-description">
-
-                    Confidence in Analysis
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="priority-wrapper">
-
-            <div class="priority-title">
-
-                Priority Status
-
-            </div>
-
-            <div class="priority-pill">
-
-                🟠 {escape(str(priority))}
-
-            </div>
-
-        </div>
-
-    </div>
+SENTIMENT
 
 </div>
 
-"""
+<div class="metric-number">
 
-    return html
+{status}
+
+</div>
+
+<div class="metric-description">
+
+Overall Business Outlook
+
+</div>
+
+</div>
+""",
+                unsafe_allow_html=True,
+            )
+
+        with col2:
+
+            st.markdown(
+                f"""
+<div class="metric-box">
+
+<div class="metric-label">
+
+HEALTH SCORE
+
+</div>
+
+<div class="metric-number">
+
+{score}
+
+</div>
+
+<div class="metric-description">
+
+Overall Business Health
+
+</div>
+
+</div>
+""",
+                unsafe_allow_html=True,
+            )
+
+        with col3:
+
+            st.markdown(
+                f"""
+<div class="metric-box">
+
+<div class="metric-label">
+
+AI CONFIDENCE
+
+</div>
+
+<div class="metric-number">
+
+{confidence}%
+
+</div>
+
+<div class="metric-description">
+
+Evidence Confidence
+
+</div>
+
+</div>
+""",
+                unsafe_allow_html=True,
+            )
+
+        st.write("")
+
+        st.markdown(
+            f"""
+<div class="priority-wrapper">
+
+<div class="priority-title">
+
+Priority Status
+
+</div>
+
+<div class="priority-pill">
+
+🟠 {priority}
+
+</div>
+
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        st.divider()
+
+        st.subheader("Executive Intelligence Highlights")
+
+        st.info(
+            "Executive Highlights will be connected in the next step."
+        )
+
+        st.divider()
+
+        tab1, tab2, tab3, tab4, tab5 = st.tabs(
+            [
+                "Executive",
+                "Commercial",
+                "Insights",
+                "Recommendations",
+                "Action Plan",
+            ]
+        )
+
+        with tab1:
+            st.write("Executive View")
+
+        with tab2:
+            st.write("Commercial Intelligence")
+
+        with tab3:
+            st.write("Insights")
+
+        with tab4:
+            st.write("Recommendations")
+
+        with tab5:
+            st.write("Action Plan")
