@@ -23,9 +23,9 @@ class ExecutiveWorkspace:
         )
 
     def _build_page(
-    self,
-    result,
-    ai,
+        self,
+        result,
+        ai,
 ):
 
     health = ai.get("health_snapshot", {})
