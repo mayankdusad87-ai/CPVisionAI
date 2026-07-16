@@ -35,7 +35,7 @@ from core.ai.validator import AIResponseValidator
 
 from core.ai.prompts import (
     SYSTEM_PROMPT,
-    EXECUTIVE_SUMMARY_PROMPT,
+    EXECUTIVE_REPORT_PROMPT,
     OUTPUT_FORMAT,
 )
 
@@ -157,7 +157,7 @@ class ConsultingEngine:
 
         prompt = f"""
 
-{EXECUTIVE_SUMMARY_PROMPT}
+{EXECUTIVE_REPORT_PROMPT}
 
 ========================================================
 
