@@ -14,7 +14,14 @@ import streamlit as st
 
 def show_executive(result):
 
+    workspace = ExecutiveWorkspace()
+
+    workspace.render(
+
+        result,
+
     ai = result.ai_report or {}
+    )    
 
     st.title("📊 Executive Intelligence Report")
 
