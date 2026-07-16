@@ -20,6 +20,7 @@ from core.excel_reader import ExcelReader
 from core.partner_analyzer import PartnerAnalyzer
 from core.partner_engine import PartnerEngine
 from core.reporting_period import ReportingPeriod
+from core.business_objects.factory import BusinessObjectFactory
 
 from core.ai.consulting_engine import ConsultingEngine
 from core.ai.groq_provider import GroqProvider
@@ -51,6 +52,7 @@ class AnalysisService:
         self.consulting = ConsultingEngine(
             self.ai_provider
         )
+        self.business_objects = BusinessObjectFactory()
 
     # =====================================================
     # PUBLIC
@@ -196,6 +198,8 @@ class AnalysisService:
 
             "generated_at": datetime.now(),
 
+            "commercial_object": commercial_object,
+
         }
         # ----------------------------------------------
         # TEST - COMMERCIAL CONVERSION SIGNAL
@@ -206,6 +210,7 @@ class AnalysisService:
         from core.intelligence.conversion_signal import ConversionSignal
         
         signal = ConversionSignal().analyse(df)
+        commercial_object = self.business_objects.commercial(signal)
 
         result.metadata["commercial_intelligence"] = {
 
