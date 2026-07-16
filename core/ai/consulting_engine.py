@@ -86,9 +86,7 @@ class ConsultingEngine:
         print(context)
         print("=" * 80)
 
-       # --------------------------------------------
-       # STEP 2 - Executive Highlights
-       # --------------------------------------------
+       
       
         # --------------------------------------------
         # STEP 2 - Executive Highlights
@@ -208,9 +206,15 @@ COMMERCIAL INTELLIGENCE
 
 ------------------------------------------------
 
+EXECUTIVE HIGHLIGHTS (VERIFIED)
+
+{json.dumps(payload["executive_highlights"], indent=4, default=str)}
+
+------------------------------------------------
+
 KEY VERIFIED FINDINGS
 
-{payload["findings"]["findings"]}
+{json.dumps(payload["findings"]["findings"], indent=4, default=str)}
 
 ------------------------------------------------
 
@@ -223,6 +227,21 @@ BUSINESS FACTS (FULL)
 IMPORTANT
 
 ========================================================
+The Executive Highlights are VERIFIED BUSINESS OBSERVATIONS.
+
+Do NOT create new executive highlights.
+
+For each Executive Highlight:
+
+1. Explain why it matters.
+2. Explain the business implication.
+3. Recommend a management action.
+
+Do not change the observation.
+
+Do not change the evidence.
+
+Observation and Evidence are already verified by the Business Engine.
 
 Use ONLY supplied business facts.
 
