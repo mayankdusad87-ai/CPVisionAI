@@ -81,6 +81,10 @@ class ExecutiveWorkspace:
         self.render_priority(
             priority,
         )
+
+        self.render_highlights(
+        ai,
+       )
     # =====================================================
     # HEADER
     # =====================================================
