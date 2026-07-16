@@ -1,20 +1,35 @@
 """
 =========================================================
-ChannelIQ
+ChannelIQ AI
 
 Executive Workspace
 
+Enterprise Executive Report UI
+
 =========================================================
 """
+
+from __future__ import annotations
 
 import streamlit as st
 
 
 class ExecutiveWorkspace:
 
-    def render(self, result, ai):
+    # =====================================================
+    # PUBLIC
+    # =====================================================
 
-        health = ai.get("health_snapshot", {})
+    def render(
+        self,
+        result,
+        ai,
+    ):
+
+        health = ai.get(
+            "health_snapshot",
+            {},
+        )
 
         reporting_period = result.metadata.get(
             "reporting_period",
@@ -23,222 +38,152 @@ class ExecutiveWorkspace:
 
         analysis_id = result.analysis_id
 
-        status = health.get("status", "-")
-        score = health.get("score", "-")
-        confidence = health.get("confidence", 0)
+        sentiment = health.get(
+            "status",
+            "-",
+        )
+
+        health_score = health.get(
+            "score",
+            "-",
+        )
+
+        confidence = health.get(
+            "confidence",
+            0,
+        )
+
         priority = health.get(
             "management_priority",
-            "No Priority",
+            "Normal",
         )
-
-        # --------------------------------------------------
-        # Header
-        # --------------------------------------------------
 
         st.markdown(
             """
-            <div class="executive-wrapper">
-
-                <div class="executive-card">
-
-                    <div class="executive-top">
-
-                        <div>
-
-                            <div class="executive-title">
-                                📊 Executive Intelligence Report
-                            </div>
-
-                            <div class="executive-subtitle">
-                                AI Powered Business Intelligence
-                            </div>
-
-                        </div>
-
-                        <div class="metadata-card">
-
-                            <div class="meta-label">
-                                REPORTING PERIOD
-                            </div>
-
-                            <div class="meta-value">
-            """
-            + str(reporting_period)
-            + """
-                            </div>
-
-                            <div class="meta-label">
-                                ANALYSIS ID
-                            </div>
-
-                            <div class="meta-value">
-            """
-            + str(analysis_id)
-            + """
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-            """,
+<div class="executive-page">
+""",
             unsafe_allow_html=True,
         )
 
-        st.markdown("### Executive Intelligence Brief")
+        self.render_header()
 
-        st.write("")
+        self.render_brief_header(
+            reporting_period,
+            analysis_id,
+        )
 
-        # --------------------------------------------------
-        # KPI Tiles
-        # --------------------------------------------------
+        self.render_metric_tiles(
+            sentiment,
+            health_score,
+            confidence,
+        )
 
-        col1, col2, col3 = st.columns(3)
+        self.render_priority(
+            priority,
+        )
+    # =====================================================
+    # HEADER
+    # =====================================================
 
-        with col1:
-
-            st.markdown(
-                f"""
-<div class="metric-box">
-
-<div class="metric-label">
-
-SENTIMENT
-
-</div>
-
-<div class="metric-number">
-
-{status}
-
-</div>
-
-<div class="metric-description">
-
-Overall Business Outlook
-
-</div>
-
-</div>
-""",
-                unsafe_allow_html=True,
-            )
-
-        with col2:
-
-            st.markdown(
-                f"""
-<div class="metric-box">
-
-<div class="metric-label">
-
-HEALTH SCORE
-
-</div>
-
-<div class="metric-number">
-
-{score}
-
-</div>
-
-<div class="metric-description">
-
-Overall Business Health
-
-</div>
-
-</div>
-""",
-                unsafe_allow_html=True,
-            )
-
-        with col3:
-
-            st.markdown(
-                f"""
-<div class="metric-box">
-
-<div class="metric-label">
-
-AI CONFIDENCE
-
-</div>
-
-<div class="metric-number">
-
-{confidence}%
-
-</div>
-
-<div class="metric-description">
-
-Evidence Confidence
-
-</div>
-
-</div>
-""",
-                unsafe_allow_html=True,
-            )
-
-        st.write("")
+    def render_header(self):
 
         st.markdown(
-            f"""
-<div class="priority-wrapper">
+            """
+<div class="executive-report-header">
 
-<div class="priority-title">
+    <div>
 
-Priority Status
+        <div class="executive-report-title">
 
-</div>
+            📊 Executive Intelligence Report
 
-<div class="priority-pill">
+        </div>
 
-🟠 {priority}
+        <div class="executive-report-subtitle">
 
-</div>
+            AI Powered Business Intelligence
+
+        </div>
+
+    </div>
 
 </div>
 """,
             unsafe_allow_html=True,
         )
+            # =====================================================
+    # EXECUTIVE BRIEF
+    # =====================================================
 
-        st.divider()
+    def render_brief_header(
+        self,
+        reporting_period,
+        analysis_id,
+    ):
 
-        st.subheader("Executive Intelligence Highlights")
-
-        st.info(
-            "Executive Highlights will be connected in the next step."
+        left, right = st.columns(
+            [3, 1],
         )
 
-        st.divider()
+        with left:
 
-        tab1, tab2, tab3, tab4, tab5 = st.tabs(
-            [
-                "Executive",
-                "Commercial",
-                "Insights",
-                "Recommendations",
-                "Action Plan",
-            ]
-        )
+            st.markdown(
+                """
+<div class="executive-card">
 
-        with tab1:
-            st.write("Executive View")
+<div class="executive-card-title">
 
-        with tab2:
-            st.write("Commercial Intelligence")
+Executive Intelligence Brief
 
-        with tab3:
-            st.write("Insights")
+</div>
 
-        with tab4:
-            st.write("Recommendations")
+<div class="executive-card-subtitle">
 
-        with tab5:
-            st.write("Action Plan")
+OFFICIAL EXECUTIVE INTELLIGENCE BRIEFING
+
+</div>
+
+</div>
+""",
+                unsafe_allow_html=True,
+            )
+
+        with right:
+
+            st.markdown(
+                f"""
+<div class="metadata-card">
+
+<div class="meta-heading">
+
+Reporting Period
+
+</div>
+
+<div class="meta-value">
+
+{reporting_period}
+
+</div>
+
+<br>
+
+<div class="meta-heading">
+
+Analysis ID
+
+</div>
+
+<div class="meta-value">
+
+{analysis_id}
+
+</div>
+
+</div>
+""",
+                unsafe_allow_html=True,
+            )
+
+        st.markdown("<br>", unsafe_allow_html=True)
+
