@@ -20,6 +20,14 @@ def show_executive(result):
 
     st.divider()
 
+    show_health_snapshot(ai)
+    
+    st.divider()
+    
+    show_executive_highlights(ai)
+    
+    st.divider()
+
     show_commercial_intelligence(result)
 
     st.divider()
@@ -267,6 +275,82 @@ def show_business_brief(ai):
         )
 
     )
+
+def show_executive_highlights(ai):
+
+    st.subheader("⭐ Executive Intelligence Highlights")
+
+    highlights = ai.get("executive_highlights", [])
+
+    if not highlights:
+        st.info("No Executive Intelligence Highlights available.")
+        return
+
+    severity_icon = {
+        "Critical": "🔴",
+        "High": "🟠",
+        "Medium": "🟡",
+        "Low": "🟢",
+        "Excellent": "🟢",
+    }
+
+    for item in highlights:
+
+        icon = severity_icon.get(
+            item.get("priority", "Medium"),
+            "⚪"
+        )
+
+        with st.container(border=True):
+
+            st.markdown(
+                f"### {icon} {item.get('title', 'Executive Insight')}"
+            )
+
+            st.markdown("**Observation**")
+            st.write(
+                item.get("observation", "")
+            )
+
+            evidence = item.get("evidence", {})
+
+            if evidence:
+
+                st.markdown("**Evidence**")
+
+                for metric, value in evidence.items():
+
+                    st.write(
+                        f"• **{metric.replace('_',' ').title()}** : {value}"
+                    )
+
+            implication = item.get(
+                "business_implication",
+                ""
+            )
+
+            if implication:
+
+                st.markdown("**Business Implication**")
+
+                st.write(
+                    implication
+                )
+
+            action = item.get(
+                "management_action",
+                ""
+            )
+
+            if action:
+
+                st.markdown("**Management Action**")
+
+                st.write(
+                    action
+                )
+
+
 
 
 # =====================================================
