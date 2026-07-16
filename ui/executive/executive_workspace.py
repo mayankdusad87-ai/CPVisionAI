@@ -111,7 +111,7 @@ class ExecutiveWorkspace:
 """,
             unsafe_allow_html=True,
         )
-            # =====================================================
+    # =====================================================
     # EXECUTIVE BRIEF
     # =====================================================
 
@@ -177,6 +177,219 @@ Analysis ID
 <div class="meta-value">
 
 {analysis_id}
+
+</div>
+
+</div>
+""",
+                unsafe_allow_html=True,
+            )
+
+        st.markdown("<br>", unsafe_allow_html=True)
+    # =====================================================
+    # KPI TILES
+    # =====================================================
+
+    def render_metric_tiles(
+        self,
+        sentiment,
+        health_score,
+        confidence,
+    ):
+
+        c1, c2, c3 = st.columns(3)
+
+        with c1:
+
+            st.markdown(
+                f"""
+<div class="metric-card">
+
+<div class="metric-title">
+Sentiment
+</div>
+
+<div class="metric-value">
+{sentiment}
+</div>
+
+<div class="metric-footer">
+Overall Business Outlook
+</div>
+
+</div>
+""",
+                unsafe_allow_html=True,
+            )
+
+        with c2:
+
+            st.markdown(
+                f"""
+<div class="metric-card">
+
+<div class="metric-title">
+Health Score
+</div>
+
+<div class="metric-value">
+{health_score}
+</div>
+
+<div class="metric-footer">
+Overall Business Health
+</div>
+
+</div>
+""",
+                unsafe_allow_html=True,
+            )
+
+        with c3:
+
+            st.markdown(
+                f"""
+<div class="metric-card">
+
+<div class="metric-title">
+AI Confidence
+</div>
+
+<div class="metric-value">
+{confidence}%
+</div>
+
+<div class="metric-footer">
+Evidence Confidence
+</div>
+
+</div>
+""",
+                unsafe_allow_html=True,
+            )
+
+        st.markdown("<br>", unsafe_allow_html=True)
+    # =====================================================
+    # PRIORITY
+    # =====================================================
+
+    def render_priority(
+        self,
+        priority,
+    ):
+
+        colour = "#2563eb"
+
+        if str(priority).lower() == "high":
+            colour = "#dc2626"
+
+        elif str(priority).lower() == "medium":
+            colour = "#d97706"
+
+        elif str(priority).lower() == "low":
+            colour = "#16a34a"
+
+        st.markdown(
+            f"""
+<div class="priority-container">
+
+<div class="priority-label">
+
+Priority Status
+
+</div>
+
+<div
+class="priority-pill"
+
+style="background:{colour}20;color:{colour};">
+
+{priority}
+
+</div>
+
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        st.markdown("<br>", unsafe_allow_html=True)
+    # =====================================================
+    # EXECUTIVE HIGHLIGHTS
+    # =====================================================
+
+    def render_highlights(
+        self,
+        ai,
+    ):
+
+        st.markdown(
+            """
+<div class="section-title">
+
+Executive Intelligence Highlights
+
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        highlights = ai.get(
+            "executive_highlights",
+            [],
+        )
+
+        if not highlights:
+
+            st.markdown(
+                """
+<div class="highlight-empty">
+
+No executive intelligence highlights available.
+
+</div>
+""",
+                unsafe_allow_html=True,
+            )
+
+            return
+
+        for item in highlights:
+
+            title = item.get(
+                "title",
+                "",
+            )
+
+            observation = item.get(
+                "observation",
+                "",
+            )
+
+            evidence = item.get(
+                "evidence",
+                "",
+            )
+
+            st.markdown(
+                f"""
+<div class="highlight-card">
+
+<div class="highlight-title">
+
+{title}
+
+</div>
+
+<div class="highlight-observation">
+
+{observation}
+
+</div>
+
+<div class="highlight-evidence">
+
+{evidence}
 
 </div>
 
