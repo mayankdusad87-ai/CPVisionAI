@@ -19,6 +19,9 @@ def show_executive(result):
     show_header(result)
 
     st.divider()
+    show_executive_brief(result, ai)
+
+    st.divider()
 
     tab1, tab2, tab3, tab4, tab5 = st.tabs(
 
@@ -88,33 +91,116 @@ def show_executive(result):
         
 # Remaining sections will be added in Part 2
 
-
 # =====================================================
 # HEADER
 # =====================================================
 
 def show_header(result):
 
-    st.subheader("Executive Intelligence Brief")
-
-    col1, col2 = st.columns(2)
+    col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-
-        st.caption(f"Company : {result.company_name}")
-
-        st.caption(f"Project : {result.project_name}")
+        st.caption("Company")
+        st.write(result.company_name or "Not Selected")
 
     with col2:
+        st.caption("Project")
+        st.write(result.project_name or "Not Selected")
 
-        st.caption(
-            f"Reporting Period : {result.metadata.get('reporting_period','-')}"
+    with col3:
+        st.caption("Analysis ID")
+        st.write(result.analysis_id)
+
+    with col4:
+        st.caption("Generated On")
+        generated = result.metadata.get("generated_at")
+
+        if generated:
+            st.write(generated.strftime("%d %b %Y"))
+        else:
+            st.write("-")
+# =====================================================
+# EXECUTIVE BRIEF
+# =====================================================
+
+def show_executive_brief(result, ai):
+
+    health = ai.get("health_snapshot", {})
+
+    with st.container(border=True):
+
+        left, right = st.columns([3, 1])
+
+        with left:
+
+            st.markdown("## Executive Intelligence Brief")
+
+            st.caption("OFFICIAL INTELLIGENCE BRIEFING")
+
+        with right:
+
+            st.markdown(
+                f"""
+**Reporting Period**
+
+{result.metadata.get("reporting_period","-")}
+
+**Analysis ID**
+
+{result.analysis_id}
+"""
+            )
+
+        st.divider()
+
+        c1, c2, c3 = st.columns(3)
+
+        with c1:
+
+            st.metric(
+
+                "📈 Sentiment",
+
+                health.get("status", "-"),
+
+            )
+
+        with c2:
+
+            st.metric(
+
+                "❤️ Health Score",
+
+                health.get("score", "-"),
+
+            )
+
+        with c3:
+
+            st.metric(
+
+                "🤖 AI Confidence",
+
+                f"{health.get('confidence',0)}%",
+
+            )
+
+        st.divider()
+
+        st.markdown("### Priority Status")
+
+        st.success(
+
+            health.get(
+
+                "management_priority",
+
+                "No management priority identified.",
+
+            )
+
         )
-
-        st.caption(
-            f"Analysis ID : {result.analysis_id}"
-        )
-
+        
 # =====================================================
 # COMMERCIAL INTELLIGENCE
 # =====================================================
