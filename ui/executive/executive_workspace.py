@@ -1,6 +1,5 @@
 """
 =========================================================
-
 ChannelIQ
 
 Executive Workspace
@@ -9,232 +8,184 @@ Executive Workspace
 """
 
 import streamlit as st
-
-from ui.components.header import Header
-from ui.components.metric_card import MetricCard
-from ui.components.badge import Badge
-from ui.components.tabs import WorkspaceTabs
+from html import escape
 
 
 class ExecutiveWorkspace:
 
-    def render(
+    def render(self, result, ai):
 
-        self,
-
-        result,
-
-        ai,
-
-    ):
-
-        Header.render(
-
-            "Executive Intelligence Workspace",
-
-            "OFFICIAL EXECUTIVE INTELLIGENCE BRIEFING",
-
-        )
-
-        st.markdown("<br>", unsafe_allow_html=True)
-
-        self.executive_brief(
-
-            result,
-
-            ai,
-
-        )
-
-    # =====================================================
-
-    # Executive Brief
-
-    # =====================================================
-
-    def executive_brief(
-
-        self,
-
-        result,
-
-        ai,
-
-    ):
-
-        health = ai.get(
-
-            "health_snapshot",
-
-            {},
-
-        )
+        html = self._build_page(result, ai)
 
         st.markdown(
-
-            '<div class="channel-card">',
-
+            html,
             unsafe_allow_html=True,
-
         )
 
-        left, right = st.columns(
+    def _build_page(
+    self,
+    result,
+    ai,
+):
 
-            [3,1]
+    health = ai.get("health_snapshot", {})
 
-        )
+    status = health.get("status", "-")
+    score = health.get("score", "-")
+    confidence = health.get("confidence", 0)
+    priority = health.get("management_priority", "Not Available")
 
-        with left:
+    reporting_period = result.metadata.get(
+        "reporting_period",
+        "-",
+    )
 
-            st.markdown(
+    analysis_id = result.analysis_id
 
-                "### Executive Intelligence Brief"
+    html = f"""
 
-            )
+<div class="executive-wrapper">
 
-            st.caption(
+    <div class="executive-card">
 
-                "OFFICIAL INTELLIGENCE BRIEFING"
+        <div class="executive-top">
 
-            )
+            <div>
 
-        with right:
+                <div class="executive-title">
 
-            st.caption(
+                    📊 Executive Intelligence Report
 
-                "Reporting Period"
+                </div>
 
-            )
+                <div class="executive-subtitle">
 
-            st.write(
+                    Executive Intelligence Brief
 
-                result.metadata.get(
+                </div>
 
-                    "reporting_period",
+            </div>
 
-                    "-",
+            <div class="metadata-card">
 
-                )
+                <div class="meta-label">
 
-            )
+                    Reporting Period
 
-            st.caption(
+                </div>
 
-                "Analysis ID"
+                <div class="meta-value">
 
-            )
+                    {escape(str(reporting_period))}
 
-            st.write(
+                </div>
 
-                result.analysis_id
+                <div class="meta-label">
 
-            )
+                    Analysis ID
 
-        st.markdown("---")
+                </div>
 
-        c1, c2, c3 = st.columns(3)
+                <div class="meta-value">
 
-        with c1:
+                    {escape(str(analysis_id))}
 
-            MetricCard.render(
+                </div>
 
-                "Health Score",
+            </div>
 
-                 health.get("score","-"),
+        </div>
 
-                "Overall Business Health",
+        <div class="metric-grid">
 
-                      "❤️"
+            <div class="metric-box">
 
-            
+                <div class="metric-label">
 
-            )
+                    SENTIMENT
 
-        with c2:
+                </div>
 
-            MetricCard.render(
+                <div class="metric-number">
 
-                "Health Score",
+                    {escape(str(status))}
 
-                health.get(
+                </div>
 
-                    "score",
+                <div class="metric-description">
 
-                    "-",
+                    Overall Business Outlook
 
-                ),
+                </div>
 
-            )
+            </div>
 
-        with c3:
+            <div class="metric-box">
 
-            MetricCard.render(
+                <div class="metric-label">
 
-                "AI Confidence",
+                    HEALTH SCORE
 
-                str(health.get("confidence",0))+"%",
- 
-                "Evidence Confidence",
-                "🛡️"
+                </div>
 
-            )
+                <div class="metric-number">
 
-        st.markdown("<br>", unsafe_allow_html=True)
+                    {escape(str(score))}
 
-        Badge.priority(
+                </div>
 
-            health.get(
+                <div class="metric-description">
 
-                "management_priority",
+                    Overall Business Health
 
-                "No Priority",
+                </div>
 
-            )
+            </div>
 
-        )
+            <div class="metric-box">
 
-        st.markdown("</div>", unsafe_allow_html=True)
+                <div class="metric-label">
 
-        st.markdown("<br>", unsafe_allow_html=True)
+                    AI CONFIDENCE
 
-        tab1, tab2, tab3, tab4, tab5 = WorkspaceTabs.render()
+                </div>
 
-        with tab1:
+                <div class="metric-number">
 
-            st.info(
+                    {escape(str(confidence))}%
 
-                "Executive Highlights will be rendered here."
+                </div>
 
-            )
+                <div class="metric-description">
 
-        with tab2:
+                    Confidence in Analysis
 
-            st.info(
+                </div>
 
-                "Commercial Intelligence"
+            </div>
 
-            )
+        </div>
 
-        with tab3:
+        <div class="priority-wrapper">
 
-            st.info(
+            <div class="priority-title">
 
-                "Business Findings"
+                Priority Status
 
-            )
+            </div>
 
-        with tab4:
+            <div class="priority-pill">
 
-            st.info(
+                🟠 {escape(str(priority))}
 
-                "Recommendations"
+            </div>
 
-            )
+        </div>
 
-        with tab5:
+    </div>
 
-            st.info(
+</div>
 
-                "Action Plan"
+"""
 
-            )
+    return html
