@@ -138,15 +138,15 @@ class ExecutiveWorkspace:
 
             MetricCard.render(
 
-                "Sentiment",
+                "Health Score",
 
-                health.get(
+                 health.get("score","-"),
 
-                    "status",
+                "Overall Business Health",
 
-                    "-",
+                      "❤️"
 
-                ),
+            
 
             )
 
