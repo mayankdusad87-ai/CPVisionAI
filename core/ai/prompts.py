@@ -188,7 +188,7 @@ The report should answer:
 - Why does it matter?
 - What should management prioritise?
 - What action deserves immediate attention?
-"""
+
 ========================================================
 
 CONSULTING METHODOLOGY
@@ -314,6 +314,7 @@ Explain WHY the facts matter.
 Explain WHAT management should do next.
 
 Explain WHAT happens if management ignores the issue.
+"""
 # =========================================================
 # KEY FINDINGS
 # =========================================================
