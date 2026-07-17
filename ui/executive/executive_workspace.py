@@ -177,36 +177,95 @@ AI Confidence
 
         st.divider()
 
-        st.subheader(
-            "Executive Intelligence Highlights"
-        )
+        st.subheader("Executive Intelligence Highlights")
 
-        highlights = ai.get(
-            "executive_highlights",
-            [],
-        )
+highlights = ai.get("executive_highlights", [])
 
-        if highlights:
+if highlights:
 
-            for item in highlights:
+    for item in highlights:
 
-                st.markdown(
-                    f"""
-### {item.get("title","")}
+        with st.container(border=True):
 
-{item.get("observation","")}
-
-**Evidence**
-
-{item.get("evidence","")}
-"""
-                )
-
-        else:
-
-            st.info(
-                "No Executive Highlights Available."
+            # -----------------------------------------
+            # Title
+            # -----------------------------------------
+            st.markdown(
+                f"## {item.get('title', 'Executive Insight')}"
             )
+
+            st.divider()
+
+            # -----------------------------------------
+            # Key Insight
+            # -----------------------------------------
+            st.markdown("### 💡 Key Insight")
+
+            st.write(
+                item.get(
+                    "key_insight",
+                    item.get("observation", "Not Available"),
+                )
+            )
+
+            st.write("")
+
+            # -----------------------------------------
+            # Supporting Evidence
+            # -----------------------------------------
+            st.markdown("### 📊 Supporting Evidence")
+
+            evidence = item.get(
+                "supporting_evidence",
+                item.get("evidence", {}),
+            )
+
+            if isinstance(evidence, dict):
+
+                st.table(evidence)
+
+            else:
+
+                st.write(evidence)
+
+            st.write("")
+
+            # -----------------------------------------
+            # Business Implication
+            # -----------------------------------------
+            st.markdown("### 💼 Business Implication")
+
+            st.write(
+                item.get(
+                    "business_implication",
+                    "Not Available",
+                )
+            )
+
+            st.write("")
+
+            # -----------------------------------------
+            # Recommended Management Action
+            # -----------------------------------------
+            st.markdown(
+                "### 🎯 Recommended Management Action"
+            )
+
+            st.write(
+                item.get(
+                    "recommended_management_action",
+                    item.get(
+                        "recommended_action",
+                        "Not Available",
+                    ),
+                )
+            )
+
+            st.write("")
+
+else:
+
+    st.info("No Executive Highlights Available.")
 
         st.divider()
 
