@@ -92,10 +92,64 @@ class ContextBuilder:
             # BUSINESS INTELLIGENCE
             # -------------------------------------------------
 
-            "partner_intelligence": metadata.get(
-                "partner_summary",
-                {},
-            ),
+            "partner_intelligence": {
+            
+                "active_count": partner.get(
+                    "active_count",
+                    0,
+                ),
+            
+                "executive_summary": partner.get(
+                    "executive_summary",
+                    "",
+                ),
+            
+                "recommendations": partner.get(
+                    "recommendations",
+                    [],
+                ),
+            
+                "best_partner": (
+                    partner.get("best_partner").to_dict()
+                    if hasattr(
+                        partner.get("best_partner"),
+                        "to_dict",
+                    )
+                    else None
+                ),
+            
+                "worst_partner": (
+                    partner.get("worst_partner").to_dict()
+                    if hasattr(
+                        partner.get("worst_partner"),
+                        "to_dict",
+                    )
+                    else None
+                ),
+            
+                "top_walkins": (
+                    partner.get("top_walkins")
+                    .head(5)
+                    .to_dict("records")
+                    if hasattr(
+                        partner.get("top_walkins"),
+                        "to_dict",
+                    )
+                    else []
+                ),
+            
+                "top_conversion": (
+                    partner.get("top_conversion")
+                    .head(5)
+                    .to_dict("records")
+                    if hasattr(
+                        partner.get("top_conversion"),
+                        "to_dict",
+                    )
+                    else []
+                ),
+            
+            },
 
             "customer_intelligence": metadata.get(
                 "customer_journey",
