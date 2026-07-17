@@ -120,7 +120,7 @@ Official Executive Intelligence Briefing
                         "supporting_evidence",
                         item.get("evidence", {}),
                     )
-                    st.markdown("### 📊 Supporting Evidence")
+                   
 
                     
                     # ------------------------------------------------
