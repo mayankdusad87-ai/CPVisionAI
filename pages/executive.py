@@ -309,6 +309,13 @@ def show_business_brief(ai):
 
     )
 
+# =====================================================
+# EXECUTIVE INTELLIGENCE HIGHLIGHTS
+# =====================================================
+
+import pandas as pd
+
+
 def show_executive_highlights(ai):
 
     st.subheader("⭐ Executive Intelligence Highlights")
@@ -329,60 +336,8 @@ def show_executive_highlights(ai):
 
     for item in highlights:
 
-        icon = severity_icon.get(
-            item.get("priority", "Medium"),
-            "⚪"
-        )
-
-        with st.container(border=True):
-
-            st.markdown(
-                f"### {icon} {item.get('title', 'Executive Insight')}"
-            )
-
-            st.markdown("**Observation**")
-            st.write(
-                item.get("observation", "")
-            )
-
-            evidence = item.get("evidence", {})
-
-            if evidence:
-
-                st.markdown("**Evidence**")
-
-                for metric, value in evidence.items():
-
-                    st.write(
-                        f"• **{metric.replace('_',' ').title()}** : {value}"
-                    )
-
-            implication = item.get(
-                "business_implication",
-                ""
-            )
-
-            if implication:
-
-                st.markdown("**Business Implication**")
-
-                st.write(
-                    implication
-                )
-
-            action = item.get(
-                "management_action",
-                ""
-            )
-
-            if action:
-
-                st.markdown("**Management Action**")
-
-                st.write(
-                    action
-                )
-
+        priority = item.get("priority", "Medium")
+        icon = severity_icon.get
 
 
 
