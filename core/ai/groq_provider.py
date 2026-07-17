@@ -61,12 +61,10 @@ class GroqProvider(AIProvider):
 
     @property
     def provider_name(self) -> str:
-
         return "Groq"
 
     @property
     def model_name(self) -> str:
-
         return self._model
 
     # =====================================================
@@ -76,16 +74,48 @@ class GroqProvider(AIProvider):
     def health_check(self) -> bool:
 
         try:
-
             self._client.models.list()
-
             return True
 
         except Exception as ex:
-
             logger.exception(ex)
-
             return False
+
+    # =====================================================
+    # JSON CLEANUP
+    # =====================================================
+
+    def _extract_json(self, text: str) -> str:
+        """
+        Extract JSON from LLM output.
+
+        Handles:
+
+        - ```json ... ```
+        - Extra explanation before JSON
+        - Extra explanation after JSON
+        """
+
+        text = text.strip()
+
+        if text.startswith("```json"):
+            text = text.replace("```json", "")
+
+        if text.startswith("```"):
+            text = text.replace("```", "")
+
+        if text.endswith("```"):
+            text = text[:-3]
+
+        text = text.strip()
+
+        start = text.find("{")
+        end = text.rfind("}")
+
+        if start == -1 or end == -1:
+            raise ValueError("No JSON object found in AI response.")
+
+        return text[start:end + 1]
 
     # =====================================================
     # GENERATE
@@ -107,11 +137,9 @@ class GroqProvider(AIProvider):
             try:
 
                 response = self._client.chat.completions.create(
-
                     model=self._model,
-
                     temperature=temperature,
-
+                    max_completion_tokens=max_output_tokens,
                     messages=[
                         {
                             "role": "system",
@@ -124,21 +152,14 @@ class GroqProvider(AIProvider):
                     ],
                 )
 
-                text = (
+                raw_text = (
                     response
                     .choices[0]
                     .message
                     .content
-                    .strip()
                 )
 
-                if text.startswith("```json"):
-
-                    text = (
-                        text.replace("```json", "")
-                        .replace("```", "")
-                        .strip()
-                    )
+                text = self._extract_json(raw_text)
 
                 return json.loads(text)
 
@@ -148,6 +169,11 @@ class GroqProvider(AIProvider):
                     "Invalid JSON returned by AI."
                 )
 
+                logger.error(
+                    "Raw AI Response:\n%s",
+                    raw_text[:1000] if "raw_text" in locals() else ""
+                )
+
                 raise ValueError(
                     "AI response is not valid JSON."
                 )
@@ -155,7 +181,7 @@ class GroqProvider(AIProvider):
             except Exception as ex:
 
                 logger.warning(
-                    f"Attempt {attempt+1} failed: {ex}"
+                    f"Attempt {attempt + 1} failed: {ex}"
                 )
 
                 if attempt == retries - 1:
