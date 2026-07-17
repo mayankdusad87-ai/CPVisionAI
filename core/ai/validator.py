@@ -19,6 +19,7 @@ Responsibilities
 from __future__ import annotations
 
 from typing import Any
+import copy
 
 
 class AIResponseValidator:
@@ -30,38 +31,37 @@ class AIResponseValidator:
     DEFAULT_RESPONSE = {
 
         "health_snapshot": {
-    
             "status": "",
-    
             "score": 0,
-    
             "confidence": 0,
-    
             "management_priority": ""
-    
         },
-    
+
         "business_brief": "",
-    
+
         "executive_summary": "",
-    
+
         "diagnosis": "",
-    
+
+        # NEW
+        "executive_highlights": [],
+
         "key_findings": [],
-    
+
         "root_causes": [],
-    
+
         "risks": [],
-    
+
         "opportunities": [],
-    
+
         "recommendations": [],
-    
+
         "monday_plan": [],
-    
-        "leadership_questions": [],
-    
+
+        "leadership_questions": []
+
     }
+
     # =====================================================
     # PUBLIC
     # =====================================================
@@ -78,20 +78,16 @@ class AIResponseValidator:
         """
 
         if response is None:
-
-            return self.DEFAULT_RESPONSE.copy()
+            return copy.deepcopy(self.DEFAULT_RESPONSE)
 
         if not isinstance(response, dict):
+            return copy.deepcopy(self.DEFAULT_RESPONSE)
 
-            return self.DEFAULT_RESPONSE.copy()
+        validated = copy.deepcopy(self.DEFAULT_RESPONSE)
 
-        validated = self.DEFAULT_RESPONSE.copy()
-
-        for key in validated:
-
-            if key in response:
-
-                validated[key] = response[key]
+        # Copy every key returned by the AI.
+        # Unknown keys are preserved for future compatibility.
+        validated.update(response)
 
         return validated
 
@@ -105,44 +101,37 @@ class AIResponseValidator:
     ) -> bool:
 
         if response is None:
-
             return False
 
         if not isinstance(response, dict):
-
             return False
 
         required = [
 
             "health_snapshot",
+
             "business_brief",
 
             "executive_summary",
-        
+
             "diagnosis",
-        
+
+            "executive_highlights",
+
             "key_findings",
-        
+
             "root_causes",
-        
+
             "risks",
-        
+
             "opportunities",
-        
+
             "recommendations",
-        
+
             "monday_plan",
-        
+
             "leadership_questions",
-
-
 
         ]
 
-        return all(
-
-            key in response
-
-            for key in required
-
-        )
+        return all(key in response for key in required)
