@@ -120,6 +120,54 @@ Official Executive Intelligence Briefing
                         "supporting_evidence",
                         item.get("evidence", {}),
                     )
+                    st.markdown("### 📊 Supporting Evidence")
+
+                    
+                    # ------------------------------------------------
+                    # Evidence as List
+                    # ------------------------------------------------
+                    
+                    if isinstance(evidence, list):
+                    
+                        table_data = []
+                    
+                        for row in evidence:
+                    
+                            table_data.append(
+                                {
+                                    "Metric": row.get("metric", ""),
+                                    "Value": row.get("value", ""),
+                                }
+                            )
+                    
+                        st.table(table_data)
+                    
+                    # ------------------------------------------------
+                    # Evidence as Dictionary
+                    # ------------------------------------------------
+                    
+                    elif isinstance(evidence, dict):
+                    
+                        table_data = []
+                    
+                        for key, value in evidence.items():
+                    
+                            table_data.append(
+                                {
+                                    "Metric": key.replace("_", " ").title(),
+                                    "Value": value,
+                                }
+                            )
+                    
+                        st.table(table_data)
+                    
+                    # ------------------------------------------------
+                    # Anything Else
+                    # ------------------------------------------------
+                    
+                    else:
+                    
+                        st.write(evidence)
 
                     if isinstance(evidence, dict):
                         st.table(evidence)
