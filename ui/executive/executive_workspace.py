@@ -8,6 +8,7 @@ Executive Workspace
 """
 
 import streamlit as st
+import pandas as pd
 
 
 class ExecutiveWorkspace:
@@ -159,7 +160,12 @@ Official Executive Intelligence Briefing
                                 }
                             )
                     
-                        st.table(table_data)
+                        df = pd.DataFrame(table_data)
+                        st.dataframe(
+                            df,
+                            hide_index=True,
+                            use_container_width=True,
+                        )
                     
                     # ------------------------------------------------
                     # Anything Else
